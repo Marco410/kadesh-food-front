@@ -10,6 +10,7 @@ import {
   getUserDetailsInLocalStorage,
   saveUserDetailsInLocalStorage,
 } from "../helpers/UserDetails";
+import { saveAuthTokens } from "../helpers/AuthTokens";
 import { SCOPES } from "../config/scopes";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../contexts/ThemeContext";
@@ -79,6 +80,11 @@ export default function LoginPage() {
       if (res.status == 200) {
         toast.dismiss();
         toast.success(t("login.success_message"));
+
+        saveAuthTokens({
+          accessToken: res.data.accessToken,
+          refreshToken: res.data.refreshToken,
+        });
 
         const result = res.data.user;
 

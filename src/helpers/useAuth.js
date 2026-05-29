@@ -4,6 +4,7 @@ import {
   getUserDetailsInLocalStorage,
   saveUserDetailsInLocalStorage,
 } from "./UserDetails";
+import { saveAuthTokens } from "./AuthTokens";
 import apiClient from "./ApiClient";
 
 export default function useAuth() {
@@ -16,11 +17,21 @@ export default function useAuth() {
   const safeRefresh = async () => {
     try {
       if (role == "superadmin") {
-        await apiClient.post("/superadmin/refresh-token");
+        const res = await apiClient.post("/superadmin/refresh-token");
+        const token = res.data.accessToken || res.data.newAccessToken;
+        if (token) {
+          saveAuthTokens({ accessToken: token });
+        }
       } else {
         const res = await apiClient.post("/auth/refresh-token");
         const user = res.data.userDetails;
-        saveUserDetailsInLocalStorage(user);
+        if (user) {
+          saveUserDetailsInLocalStorage(user);
+        }
+        const token = res.data.newAccessToken || res.data.accessToken;
+        if (token) {
+          saveAuthTokens({ accessToken: token });
+        }
       }
     } catch (error) {
       console.error("Token refresh failed:", error);

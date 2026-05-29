@@ -1,3 +1,5 @@
+import { clearAuthTokens } from "./AuthTokens";
+
 const KEY = 'kadeshfood_user'
 export function saveUserDetailsInLocalStorage(user) {
     localStorage.setItem(KEY, JSON.stringify(user));
@@ -17,4 +19,5 @@ export function getUserDetailsInLocalStorage() {
 
 export function clearUserDetailsInLocalStorage() {
     localStorage.removeItem(KEY);
+    clearAuthTokens();
 }

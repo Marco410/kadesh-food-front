@@ -1,7 +1,6 @@
 import axios from "axios";
 import { API } from "../config/config";
-import Cookie from "js-cookie";
-import { getUserDetailsInLocalStorage } from "./UserDetails";
+import { getAccessToken, getRefreshToken } from "./AuthTokens";
 import { getLanguage } from "./LocalizationHelper";
 
 const apiClient = axios.create({
@@ -19,6 +18,17 @@ apiClient.interceptors.request.use(
     }
 
     config.withCredentials = true;
+
+    const accessToken = getAccessToken();
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    const refreshToken = getRefreshToken();
+    if (refreshToken) {
+      config.headers["x-refresh-token"] = refreshToken;
+    }
+
     return config;
   },
   (error) => Promise.reject(error)

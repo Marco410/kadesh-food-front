@@ -1,4 +1,9 @@
+import { getAccessToken } from "./AuthTokens";
+import { getUserDetailsInLocalStorage } from "./UserDetails";
+
 export function isRestroUserAuthenticated() {
-    const restroAuthenticated = document.cookie.includes("kadeshfood__authenticated=");
-    return restroAuthenticated;
+    if (document.cookie.includes("kadeshfood__authenticated=")) {
+        return true;
+    }
+    return Boolean(getUserDetailsInLocalStorage() && getAccessToken());
 }

@@ -9,6 +9,7 @@ import {
   getUserDetailsInLocalStorage,
   saveUserDetailsInLocalStorage,
 } from "../../helpers/UserDetails";
+import { saveAuthTokens } from "../../helpers/AuthTokens";
 import { signIn } from "../../controllers/superadmin.controller";
 import { useTheme } from "../../contexts/ThemeContext";
 
@@ -58,6 +59,11 @@ export default function SuperAdminLoginPage() {
       if (res.status == 200) {
         toast.dismiss();
         toast.success(t("superadmin_login.success_message"));
+
+        saveAuthTokens({
+          accessToken: res.data.accessToken,
+          refreshToken: res.data.refreshToken,
+        });
 
         const user = res.data.user;
         saveUserDetailsInLocalStorage(user);
