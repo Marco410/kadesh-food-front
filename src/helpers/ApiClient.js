@@ -45,7 +45,7 @@ let retryCounter = 0;
 //       retryCounter+=1;
 
 //       if(retryCounter > 3) {
-//         Cookie.remove("restroprosaas__authenticated");
+//         Cookie.remove("kadeshfood__authenticated");
 //         if(role == "superadmin") {
 //           window.location.href = "/superadmin";
 //         } else {
