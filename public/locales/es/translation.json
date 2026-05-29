@@ -650,7 +650,8 @@
     "cancel_subscription": "Cancelar suscripción",
     "cancel_confirm": "¿Estás seguro? Esto cancelará inmediatamente tu suscripción y perderás el acceso al producto.",
     "cancel_success": "¡Suscripción cancelada con éxito!",
-    "cancel_error": "¡Ups! ¡Tuvimos problemas al procesar tu solicitud! ¡Inténtalo de nuevo más tarde! O contacta al soporte al cliente."
+    "cancel_error": "¡Ups! ¡Tuvimos problemas al procesar tu solicitud! ¡Inténtalo de nuevo más tarde! o contacta al soporte al cliente.",
+    "canceled_access_until": "Tu suscripción ha sido cancelada. Seguirás teniendo acceso hasta {{date}}."
   },
   "settings": {
     "details": "Detalles",

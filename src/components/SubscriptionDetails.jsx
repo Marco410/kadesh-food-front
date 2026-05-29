@@ -147,8 +147,9 @@ export default function SubscriptionDetails() {
       ) : (
          data?.isTrialPlan == 0 && (
           <p className="mt-4">
-            Your subscription has been canceled. You'll continue to have access until{" "}
-            {String(data?.subscription_end).substring(0, 10)}.
+            {t("subscription.canceled_access_until", {
+              date: String(data?.subscription_end).substring(0, 10),
+            })}
           </p>
 
           //show manage subscription button ?
