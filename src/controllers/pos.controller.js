@@ -1,6 +1,6 @@
 import ApiClient from "../helpers/ApiClient";
 
-const DRAFTS_KEY = "RESTROPROSAAS__DRAFTS";
+const DRAFTS_KEY = "KADESHFOOD__DRAFTS";
 
 export async function initPOS() {
     try {

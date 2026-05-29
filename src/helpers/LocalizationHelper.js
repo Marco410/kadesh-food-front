@@ -1,4 +1,4 @@
-const LANGUAGE_KEY = "RESTRO__LANG";
+const LANGUAGE_KEY = "KADESH__LANG";
 
 export function getLanguage() {
     return localStorage.getItem(LANGUAGE_KEY);

@@ -1,4 +1,4 @@
-const NAVBAR_SIZE_KEY = 'RESTROPROSAAS__NAVBAR';
+const NAVBAR_SIZE_KEY = 'KADESHFOOD__NAVBAR';
 
 /**
  * @returns {boolean} - 
