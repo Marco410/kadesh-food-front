@@ -5,7 +5,7 @@ export const FRONTEND_DOMAIN = import.meta.env.VITE_FRONTEND_DOMAIN
 
 export const iconStroke = 1.5;
 
-export const supportEmail = "hi@uiflow.in";
+export const supportEmail = "contacto@kadesh.com.mx";
 export const appVersion = "2.1.0";
 
 export const subscriptionAmount = 5;
