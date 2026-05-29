@@ -6,8 +6,8 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .use(Backend)
   .init({
-    lng: getLanguage() || 'en', // default language
-    fallbackLng: 'en', // fallback language
+    lng: getLanguage() || 'es', // default language
+    fallbackLng: 'es', // fallback language
     debug: true, // enable debug mode in development
 
     // Load translations from JSON files
