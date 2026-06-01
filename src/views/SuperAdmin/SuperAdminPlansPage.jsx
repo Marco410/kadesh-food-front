@@ -42,10 +42,12 @@ import {
   updatePaystackPlan,
 } from "../../controllers/plans.controller";
 import { PLAN_FEATURES, SCOPES } from "../../config/scopes";
+import { useScopeLabel } from "../../helpers/scopeI18n";
 import { STRIPE_SUPPORTCURRENCIES, PAYSTACK_SUPPORTCURRENCIES } from "../../config/currencies.config";
 
 export default function SuperAdminTenantsPage() {
   const { t } = useTranslation();
+  const scopeLabel = useScopeLabel();
   const { theme } = useTheme();
 
   // For Delete
@@ -949,7 +951,7 @@ export default function SuperAdminTenantsPage() {
                             </div>
                           </div>
                           <span className={clsx("text-sm font-medium flex-1", isChecked ? "text-restro-green" : "")}>
-                            {opt}
+                            {scopeLabel(opt)}
                           </span>
                         </label>
                       );
@@ -1584,7 +1586,7 @@ export default function SuperAdminTenantsPage() {
                             </div>
                           </div>
                           <span className={clsx("text-sm font-medium flex-1", isChecked ? "text-restro-green" : "")}>
-                            {opt}
+                            {scopeLabel(opt)}
                           </span>
                         </label>
                       );

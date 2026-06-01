@@ -9,7 +9,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { getSubscriptionHistory } from '../../controllers/plans.controller';
 
 export default function SuperAdminTenantSubscriptionHistoryPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const params = useParams();
   const tenantId = params.id;
   const { APIURL, data, error, isLoading } = useSuperAdminTenantSubscriptionHistory(tenantId);
@@ -150,15 +150,15 @@ export default function SuperAdminTenantSubscriptionHistoryPage() {
                       <p className="text-xs text-gray-500">
                         {status === "cancelled" || status === "cancelAtPeriodEnd" ? t("superadmin_tenant_subscription_history.cancelled_on") : t("superadmin_tenant_subscription_history.paid_on")}
                         <br />
-                        {new Date(created_at).toLocaleString("en", {
+                        {new Date(created_at).toLocaleString(i18n.language, {
                           dateStyle: "medium",
                           timeStyle: "short",
                         })}
                       </p>
                       <p className="text-xs text-gray-500">
                         {t("superadmin_tenant_subscription_history.billing_period")} <br />
-                        {new Date(starts_on).toLocaleDateString()}-
-                        {new Date(expires_on).toLocaleDateString()}
+                        {new Date(starts_on).toLocaleDateString(i18n.language)}-
+                        {new Date(expires_on).toLocaleDateString(i18n.language)}
                       </p>
                     </div>
                   </div>

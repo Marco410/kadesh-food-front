@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from '../../contexts/ThemeContext';
 
 export default function SuperAdminReportsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const filters = [
     { key: "today", value: t("superadmin_reports.filters.today") },
@@ -84,7 +84,7 @@ export default function SuperAdminReportsPage() {
 
         <div className='md:row-span-3 h-[28rem] bg-restro-superadmin-widget-bg rounded-[42px] overflow-hidden'>
           <p className='text-restro-superadmin-text-green font-bold text-center mt-4'>{t("superadmin_reports.active_tenants")}</p>
-          <p className='text-white font-black text-7xl text-center'>{Number(activeTenants).toLocaleString("en", {
+          <p className='text-white font-black text-7xl text-center'>{Number(activeTenants).toLocaleString(i18n.language, {
             notation: "compact"
           })}</p>
           <img src={ImgGirlSmiling} alt="img" className='block h-96 mx-auto' />
@@ -114,7 +114,7 @@ export default function SuperAdminReportsPage() {
                     <p className="text-xs">{tenant_name}</p>
                   </div>
                   <p className='font-bold mr-2'>
-                    {Number(qty).toLocaleString("en",{notation: "compact"})}
+                    {Number(qty).toLocaleString(i18n.language, { notation: "compact" })}
                   </p>
                 </div>
               })
@@ -124,12 +124,12 @@ export default function SuperAdminReportsPage() {
 
         <div className='rounded-[42px] border px-8 py-5 flex flex-col justify-center dark:text-white border-restro-border-green text-restro-superadmin-text-black'>
           <p className='font-bold'>{t("superadmin_reports.mrr")}</p>
-          <p className='font-black text-5xl  mt-2'>${Number(mrrValue).toLocaleString('en',{notation: "compact"})}</p>
+          <p className='font-black text-5xl  mt-2'>${Number(mrrValue).toLocaleString(i18n.language, { notation: "compact" })}</p>
         </div>
 
         <div className='rounded-[42px] border px-8 py-5 flex flex-col justify-center dark:text-white border-restro-border-green text-restro-superadmin-text-black'>
           <p className='font-bold'>{t("superadmin_reports.arr")}</p>
-          <p className='font-black text-5xl text-restro-green mt-2'>${Number(arrValue).toLocaleString('en',{notation: "compact"})}</p>
+          <p className='font-black text-5xl text-restro-green mt-2'>${Number(arrValue).toLocaleString(i18n.language, { notation: "compact" })}</p>
         </div>
 
         <div className='rounded-[42px] border px-8 py-5 flex flex-col justify-center dark:text-white border-restro-border-green text-restro-superadmin-text-black'>
@@ -138,18 +138,18 @@ export default function SuperAdminReportsPage() {
             <div className='tooltip cursor-pointer tooltip-top' data-tip={t("superadmin_reports.store_sales_info")}><IconInfoCircleFilled size={18} stroke={iconStroke}/></div>
           </div>
           <p className='font-black text-5xl mt-2'>
-            ${Number(salesVolume).toLocaleString("en", {notation: "compact"})}
+            ${Number(salesVolume).toLocaleString(i18n.language, { notation: "compact" })}
           </p>
         </div>
 
         <div className='rounded-[42px] border px-8 py-5 flex flex-col justify-center dark:text-white border-restro-border-green text-restro-superadmin-text-black'>
           <p className='font-bold'>{t("superadmin_reports.orders_processed")}</p>
-          <p className='font-black text-5xl mt-2'>{Number(ordersProcessed).toLocaleString("en",{notation: "compact"})}</p>
+          <p className='font-black text-5xl mt-2'>{Number(ordersProcessed).toLocaleString(i18n.language, { notation: "compact" })}</p>
         </div>
 
         <div className='rounded-[42px] px-8 py-5 flex flex-col justify-center border border-restro-border-green text-restro-superadmin-text-black dark:text-white '>
           <p className='font-bold'>{t("superadmin_reports.all_tenants_customers")}</p>
-          <p className='font-black text-5xl mt-2'>{Number(totalCustomers).toLocaleString("en",{notation: "compact"})}</p>
+          <p className='font-black text-5xl mt-2'>{Number(totalCustomers).toLocaleString(i18n.language, { notation: "compact" })}</p>
         </div>
       </div>
 

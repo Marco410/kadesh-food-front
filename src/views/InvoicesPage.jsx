@@ -21,7 +21,7 @@ import { setDetailsForReceiptPrint } from '../helpers/ReceiptHelper';
 import { useTheme } from "../contexts/ThemeContext";
 
 export default function InvoicesPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const filters = [
     { key: "today", value: t("invoices.today") },
     { key: "tomorrow", value: t("invoices.tomorrow") },
@@ -366,7 +366,7 @@ export default function InvoicesPage() {
                   <td>{invoice_id}</td>
                   {/* <td>{orderIds}</td> */}
                   <td>{tokens}</td>
-                  <td>{new Intl.DateTimeFormat('en', {dateStyle: "medium", timeStyle: "short"}).format(new Date(created_at))}</td>
+                  <td>{new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium", timeStyle: "short" }).format(new Date(created_at))}</td>
                   <td>{state.currency}{sub_total}</td>
                   <td>{state.currency}{tax_total}</td>
                   <td>
@@ -452,7 +452,7 @@ export default function InvoicesPage() {
                   <td>{invoice_id}</td>
                   {/* <td>{orderIds}</td> */}
                   <td>{tokens}</td>
-                  <td>{new Intl.DateTimeFormat('en', {dateStyle: "medium", timeStyle: "short"}).format(new Date(created_at))}</td>
+                  <td>{new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium", timeStyle: "short" }).format(new Date(created_at))}</td>
                   <td>{state.currency}{sub_total}</td>
                   <td>{state.currency}{tax_total}</td>
                   <td>

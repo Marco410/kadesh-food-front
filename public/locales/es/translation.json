@@ -102,7 +102,8 @@
     "SETTINGS": "Configuración",
     "REPORTS": "Informes",
     "FEEDBACK": "Comentarios",
-    "USER": "Usuarios"
+    "USER": "Usuarios",
+    "QRMENU": "Menú QR"
   },
   "reset_password": {
     "title": "Restablecer contraseña",
@@ -1744,7 +1745,7 @@
     "edit_plan": "Editar plan",
     "update_your_subscription_plan": "Actualizar tu plan de suscripción",
     "add_feature_description": "Agregar descripción de función...",
-    "feature_points": "Puntos de funciones",
+    "feature_points": "Funciones",
     "please_activate_payment_gateway_first": "Por favor, activa primero una pasarela de pago",
     "placeholder_plan_title": "Ej.: Profesional, Empresa, Inicial",
     "add_feature_description_placeholder": "Agregar una descripción de la función...",

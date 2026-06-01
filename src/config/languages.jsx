@@ -5,5 +5,5 @@ export const LANGUAGES = [
   {code: "hi", title: "Hindi"},
   {code: "ja", title: "Japanese"},
   {code: "ko", title: "Korean"},
-  {code: "es", title: "Spanish"},
+  {code: "es", title: "Español"},
 ];

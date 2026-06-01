@@ -41,7 +41,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import clsx from "clsx";
 
 export default function OrdersPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const printReceiptRef = useRef();
   const user = getUserDetailsInLocalStorage();
@@ -722,7 +722,7 @@ export default function OrdersPage() {
                         </div>
                         <div className="text-end">
                           <p>
-                            {new Intl.DateTimeFormat("en-US", {
+                            {new Intl.DateTimeFormat(i18n.language, {
                               timeStyle: "short",
                             }).format(new Date(date))}
                           </p>
