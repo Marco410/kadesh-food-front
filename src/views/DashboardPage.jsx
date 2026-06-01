@@ -26,7 +26,7 @@ import {
 } from "../components/DashboardWidgets";
 
 export default function DashboardPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data, error, isLoading } = useDashboard();
 
   if (isLoading) {
@@ -98,8 +98,13 @@ export default function DashboardPage() {
 
   // Greeting based on time
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
-  const todayStr = new Intl.DateTimeFormat("en", {
+  const greeting =
+    hour < 12
+      ? t("dashboard.greeting_morning")
+      : hour < 17
+        ? t("dashboard.greeting_afternoon")
+        : t("dashboard.greeting_evening");
+  const todayStr = new Intl.DateTimeFormat(i18n.language, {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -121,14 +126,15 @@ export default function DashboardPage() {
             to="/dashboard/reports"
             className="inline-flex items-center gap-1.5 rounded-xl bg-restro-green px-4 py-2.5 text-sm font-bold text-white transition hover:bg-restro-green/90 active:scale-95 shrink-0"
           >
-            View Reports <IconChevronRight size={16} stroke={iconStroke} />
+            {t("dashboard.view_reports")}{" "}
+            <IconChevronRight size={16} stroke={iconStroke} />
           </Link>
         </div>
 
         {/* ─── KPI Cards ────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
           <KPICard
-            label="Today's Revenue"
+            label={t("dashboard.todays_revenue")}
             value={todayRevenue?.total_revenue || 0}
             delta={revenueDelta}
             icon={IconReceipt2}
@@ -137,7 +143,7 @@ export default function DashboardPage() {
             currencySymbol={sym}
           />
           <KPICard
-            label="Orders"
+            label={t("dashboard.orders")}
             value={ordersCount || 0}
             delta={ordersDelta}
             icon={IconShoppingCart}
@@ -145,7 +151,7 @@ export default function DashboardPage() {
             currencySymbol={sym}
           />
           <KPICard
-            label="Avg Order Value"
+            label={t("dashboard.avg_order_value")}
             value={todayRevenue?.average_order_value || 0}
             delta={aovDelta}
             icon={IconTicket}
@@ -154,7 +160,7 @@ export default function DashboardPage() {
             currencySymbol={sym}
           />
           <KPICard
-            label="New Customers"
+            label={t("dashboard.new_customers_short")}
             value={newCustomerCount || 0}
             delta={customersDelta}
             icon={IconUserPlus}
@@ -172,7 +178,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <TopItemsList items={topSellingItems} currencySymbol={sym} />
           <DonutWidget
-            title="Order Type Breakdown"
+            title={t("dashboard.order_type_breakdown")}
             data={ordersByType}
             labelKey="order_type"
             valueKey="count"
@@ -184,7 +190,7 @@ export default function DashboardPage() {
         {/* ─── Row 3: Payment Mix + Peak Hours ───────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <DonutWidget
-            title="Payment Mix"
+            title={t("dashboard.payment_mix")}
             data={paymentMix}
             labelKey="payment_type"
             valueKey="total"
@@ -205,23 +211,31 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="rounded-xl border border-restro-border-green bg-background p-4 text-center">
             <p className="text-2xl font-extrabold text-foreground">{repeatedCustomerCount || 0}</p>
-            <p className="text-xs font-semibold text-restro-text mt-1">Repeat Customers</p>
+            <p className="text-xs font-semibold text-restro-text mt-1">
+              {t("dashboard.repeat_customers")}
+            </p>
           </div>
           <div className="rounded-xl border border-restro-border-green bg-background p-4 text-center">
             <p className="text-2xl font-extrabold text-foreground">{cancelledOrders || 0}</p>
-            <p className="text-xs font-semibold text-restro-text mt-1">Cancelled Orders</p>
+            <p className="text-xs font-semibold text-restro-text mt-1">
+              {t("dashboard.cancelled_orders")}
+            </p>
           </div>
           <div className="rounded-xl border border-restro-border-green bg-background p-4 text-center">
             <p className="text-2xl font-extrabold text-foreground">
               {sym}{Number(todayRevenue?.tax_total || 0).toFixed(0)}
             </p>
-            <p className="text-xs font-semibold text-restro-text mt-1">Tax Collected</p>
+            <p className="text-xs font-semibold text-restro-text mt-1">
+              {t("dashboard.tax_collected")}
+            </p>
           </div>
           <div className="rounded-xl border border-restro-border-green bg-background p-4 text-center">
             <p className="text-2xl font-extrabold text-foreground">
               {sym}{Number(todayRevenue?.service_charge_total || 0).toFixed(0)}
             </p>
-            <p className="text-xs font-semibold text-restro-text mt-1">Service Charge</p>
+            <p className="text-xs font-semibold text-restro-text mt-1">
+              {t("dashboard.service_charge")}
+            </p>
           </div>
         </div>
       </div>

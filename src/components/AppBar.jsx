@@ -63,7 +63,7 @@ export default function AppBar() {
 
   const btnLogout = async () => {
     try {
-      toast.loading("Please wait...");
+      toast.loading(t("toast.please_wait"));
       const response = await signOut();
       if (response.status == 200) {
         toast.dismiss();
@@ -72,7 +72,7 @@ export default function AppBar() {
       }
     } catch (error) {
       const message =
-        error?.response?.data?.message || "Something went wrong! Try later!";
+        error?.response?.data?.message || t("toast.something_went_wrong");
       console.error(error);
       toast.dismiss();
       toast.error(message);

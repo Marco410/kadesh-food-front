@@ -19,6 +19,8 @@ import { useTheme } from "../contexts/ThemeContext";
 
 export default function UsersPage() {
   const { t } = useTranslation();
+  const scopeLabel = (scopeKey) =>
+    t(`scope_labels.${scopeKey}`, { defaultValue: scopeKey });
   const [state, setState] = useState({
     selectedScopes: [],
   });
@@ -315,7 +317,7 @@ export default function UsersPage() {
                           key={i}
                           className='text-xs dark:rounded-full gap-1 flex items-center px-2 py-1 border rounded-full bg-restro-gray border-restro-border-green text-restro-text outline-restro-border-green-light'
                         >
-                          {s}
+                          {scopeLabel(s)}
                         </div>
                       ))}
                     </div>
@@ -479,7 +481,7 @@ export default function UsersPage() {
                 <option value="">{t("users.scope_select")}</option>
                 {Object.values(SCOPES).map((s) => (
                   <option key={s} value={s}>
-                    {s}
+                    {scopeLabel(s)}
                   </option>
                 ))}
               </select>
@@ -492,7 +494,7 @@ export default function UsersPage() {
                 key={i}
                 className='text-sm rounded-full gap-1 flex items-center p-2 bg-restro-gray '
               >
-                {s}
+                {scopeLabel(s)}
                 <button
                   onClick={() => {
                     setState({
@@ -638,7 +640,7 @@ export default function UsersPage() {
                 <option value="">{t("users.scope_select")}</option>
                 {Object.values(SCOPES).map((s) => (
                   <option key={s} value={s}>
-                    {s}
+                    {scopeLabel(s)}
                   </option>
                 ))}
               </select>
@@ -651,7 +653,7 @@ export default function UsersPage() {
                 key={i}
                 className={`text-sm border dark:rounded-full gap-1 flex items-center p-2 outline-restro-border-green-light ${theme === 'black' ? 'bg-restro-bg-hover-dark-mode border-gray-700 rounded-full focus:outline-restro-placeholder-outline-dark-mode' : 'bg-gray-100 border rounded-full text-gray-400'}`}
               >
-                {s}
+                {scopeLabel(s)}
                 <button
                   onClick={() => {
                     setState({

@@ -67,8 +67,8 @@
     "password_placeholder": "Ingrese la contraseña aquí...",
     "phone_label": "Teléfono",
     "phone_placeholder": "Ingrese el número de teléfono aquí...",
-    "designation_label": "Designación",
-    "designation_placeholder": "Ingrese la designación aquí...",
+    "designation_label": "Cargo",
+    "designation_placeholder": "Ingrese el cargo aquí...",
     "scope_label": "Ámbito",
     "scope_tooltip": "los ámbitos son como permisos",
     "scope_placeholder": "Seleccionar ámbito",
@@ -78,6 +78,31 @@
     "update_user": "Actualizar usuario",
     "username_label": "Nombre de usuario",
     "username_placeholder": "Ingrese el nombre de usuario aquí..."
+  },
+  "scope_labels": {
+    "DASHBOARD": "Panel de control",
+    "POS": "Punto de venta (POS)",
+    "CUSTOMER_DISPLAY": "Pantalla de cliente",
+    "KITCHEN_DISPLAY": "Pantalla de cocina",
+    "ORDER_STATUS_DISPLAY": "Pantalla de estado de pedidos",
+    "ORDER_STATUS": "Estado de pedidos",
+    "ORDERS": "Pedidos",
+    "KITCHEN": "Cocina",
+    "RESERVATIONS": "Reservaciones",
+    "VIEW_RESERVATIONS": "Ver reservaciones",
+    "MANAGE_RESERVATIONS": "Gestionar reservaciones",
+    "CUSTOMERS": "Clientes",
+    "VIEW_CUSTOMERS": "Ver clientes",
+    "MANAGE_CUSTOMERS": "Gestionar clientes",
+    "INVOICES": "Facturas",
+    "MEMBERSHIP": "Membresía",
+    "INVENTORY": "Inventario",
+    "VIEW_INVENTORY": "Ver inventario",
+    "MANAGE_INVENTORY": "Gestionar inventario",
+    "SETTINGS": "Configuración",
+    "REPORTS": "Informes",
+    "FEEDBACK": "Comentarios",
+    "USER": "Usuarios"
   },
   "reset_password": {
     "title": "Restablecer contraseña",
@@ -178,7 +203,260 @@
     "from": "Desde",
     "to": "Hasta",
     "close": "Cerrar",
-    "apply": "Aplicar"
+    "apply": "Aplicar",
+    "index": {
+      "subtitle": "Analiza tu rendimiento.",
+      "available_count": "{{count}} disponibles",
+      "categories_heading": "Categorías",
+      "all_reports": "Todos los informes",
+      "all_filter": "All",
+      "search_placeholder": "Buscar informes por nombre, palabra clave o categoría...",
+      "no_results_title": "No se encontraron informes",
+      "no_results_message": "Prueba ajustar tu búsqueda o los filtros.",
+      "clear_filters": "Limpiar filtros",
+      "open_report": "Abrir informe"
+    },
+    "status": {
+      "ready": "Listo",
+      "planned": "Planificado"
+    },
+    "detail": {
+      "back": "Volver a informes",
+      "showing_data_for": "Mostrando datos de",
+      "loading": "Procesando los números...",
+      "load_error_title": "Error al cargar el informe",
+      "load_error_message": "Hubo un problema al obtener estos datos. Inténtalo más tarde.",
+      "no_table_data": "No hay datos disponibles para este periodo.",
+      "not_found_title": "Informe no encontrado",
+      "not_found_message": "El informe que buscas no existe o fue movido.",
+      "planned_message": "Este informe está planificado para una fase posterior y se está siguiendo en",
+      "planned_doc": "docs/reports-roadmap.md",
+      "export_excel": "Excel",
+      "export_pdf": "PDF",
+      "export_success": "Informe {{format}} exportado",
+      "export_error": "No se pudo exportar el informe. Inténtalo de nuevo."
+    },
+    "categories": {
+      "sales": "Ventas",
+      "payments": "Pagos",
+      "menu": "Menú",
+      "customers": "Clientes",
+      "operations": "Operaciones",
+      "inventory": "Inventario",
+      "accounting": "Contabilidad",
+      "reservations": "Reservaciones",
+      "feedback": "Comentarios"
+    },
+    "catalog": {
+      "sales-summary": {
+        "title": "Resumen de ventas",
+        "description": "Ingresos, ventas netas, impuestos, cargo por servicio, pedidos, ticket promedio, clientes, artículos destacados y reparto de pagos."
+      },
+      "gross-sales": {
+        "title": "Ventas brutas",
+        "description": "Ventas totales de artículos antes de impuestos, cargos por servicio, reembolsos, anulaciones y descuentos."
+      },
+      "net-sales": {
+        "title": "Ventas netas",
+        "description": "Ventas después de descuentos y anulaciones, separadas por impuesto, cargo por servicio y total de pago."
+      },
+      "sales-by-hour": {
+        "title": "Ventas por hora",
+        "description": "Tendencia de ventas por hora para entender horas pico y periodos tranquilos."
+      },
+      "sales-by-day": {
+        "title": "Ventas por día",
+        "description": "Totales diarios de ventas, cantidad de pedidos, ticket promedio y número de clientes."
+      },
+      "sales-by-month": {
+        "title": "Ventas por mes",
+        "description": "Tendencia mensual de ingresos para revisión del negocio."
+      },
+      "sales-by-order-type": {
+        "title": "Ventas por tipo de pedido",
+        "description": "Rendimiento de consumo en local, para llevar, entrega, pedidos QR y otros tipos de servicio."
+      },
+      "sales-by-table": {
+        "title": "Ventas por mesa",
+        "description": "Ingresos, pedidos y ticket promedio agrupados por mesa y zona."
+      },
+      "invoice-detail": {
+        "title": "Detalle de facturas",
+        "description": "Totales de factura línea por línea con método de pago, impuesto, cargo por servicio y cliente."
+      },
+      "voids-cancellations": {
+        "title": "Anulaciones y cancelaciones",
+        "description": "Pedidos cancelados y artículos cancelados con cantidades y valor de venta perdido."
+      },
+      "average-order-value": {
+        "title": "Valor promedio del pedido",
+        "description": "Tendencia del ticket promedio en los periodos y tipos de servicio seleccionados."
+      },
+      "payment-summary": {
+        "title": "Resumen de pagos",
+        "description": "Pagos agrupados por efectivo, tarjeta, billetera, en línea y tipos de pago personalizados."
+      },
+      "cash-report": {
+        "title": "Informe de efectivo",
+        "description": "Cobros en efectivo, facturas en efectivo y participación del efectivo en el total de pagos."
+      },
+      "card-report": {
+        "title": "Informe de tarjeta",
+        "description": "Volumen de pagos con tarjeta y cantidad de transacciones por fecha y factura."
+      },
+      "unpaid-orders": {
+        "title": "Pedidos sin pagar",
+        "description": "Pedidos con pago pendiente para seguimiento y cierre de cuentas."
+      },
+      "payment-type-mix": {
+        "title": "Mezcla de tipos de pago",
+        "description": "Participación de ingresos por método de pago con tendencia y comparación."
+      },
+      "top-selling-items": {
+        "title": "Artículos más vendidos",
+        "description": "Artículos del menú más vendidos por cantidad, ingresos, categoría y rango de fechas."
+      },
+      "low-selling-items": {
+        "title": "Artículos de baja venta",
+        "description": "Artículos con poco movimiento para simplificar el menú."
+      },
+      "item-sales": {
+        "title": "Ventas por artículo",
+        "description": "Ingresos detallados por artículo, cantidad vendida, precio neto, impuesto y categoría."
+      },
+      "category-sales": {
+        "title": "Ventas por categoría",
+        "description": "Rendimiento de ventas por categoría: comida, bebidas, postres y personalizadas."
+      },
+      "variant-sales": {
+        "title": "Ventas por variante",
+        "description": "Rendimiento de ventas por tamaño, preparación y variantes."
+      },
+      "addon-sales": {
+        "title": "Ventas de complementos",
+        "description": "Ingresos y cantidad de complementos y modificadores de pago."
+      },
+      "menu-price-audit": {
+        "title": "Auditoría de precios del menú",
+        "description": "Precio actual de artículos, variantes, complementos, precio neto e impuestos para revisión del menú."
+      },
+      "customer-summary": {
+        "title": "Resumen de clientes",
+        "description": "Rendimiento de clientes totales, nuevos, recurrentes, miembros e invitados."
+      },
+      "new-customers": {
+        "title": "Clientes nuevos",
+        "description": "Clientes creados en el periodo seleccionado con datos de contacto."
+      },
+      "returning-customers": {
+        "title": "Clientes recurrentes",
+        "description": "Clientes que realizaron pedidos en el periodo seleccionado."
+      },
+      "top-customers": {
+        "title": "Mejores clientes",
+        "description": "Mejores clientes por gasto, visitas y ticket promedio."
+      },
+      "customer-birthdays": {
+        "title": "Cumpleaños de clientes",
+        "description": "Próximos cumpleaños para campañas y fidelización."
+      },
+      "member-customers": {
+        "title": "Clientes miembros",
+        "description": "Lista de membresía y contribución de ventas de miembros."
+      },
+      "order-status": {
+        "title": "Estado de pedidos",
+        "description": "Movimiento de pedidos creados, completados, cancelados, pagados y pendientes."
+      },
+      "kitchen-performance": {
+        "title": "Rendimiento de cocina",
+        "description": "Volumen de artículos preparados, completados, cancelados y entregados."
+      },
+      "token-report": {
+        "title": "Informe de fichas",
+        "description": "Secuencia de fichas y flujo de pedidos para mostrador y food trucks."
+      },
+      "qr-order-report": {
+        "title": "Informe de pedidos QR",
+        "description": "Volumen de pedidos QR, estado, mesa y mezcla de clientes."
+      },
+      "table-turnover": {
+        "title": "Rotación de mesas",
+        "description": "Pedidos y ventas por mesa para identificar zonas de alto uso."
+      },
+      "staff-created-orders": {
+        "title": "Pedidos creados por personal",
+        "description": "Actividad de pedidos y facturas por personal cuando hay seguimiento de usuario."
+      },
+      "inventory-summary": {
+        "title": "Resumen de inventario",
+        "description": "Stock actual, unidades, umbrales y estado de inventario."
+      },
+      "low-stock": {
+        "title": "Stock bajo",
+        "description": "Ingredientes y artículos por debajo del umbral mínimo."
+      },
+      "stock-movements": {
+        "title": "Movimientos de stock",
+        "description": "Registros de ENTRADA, SALIDA y MERMA con cantidades antes y después."
+      },
+      "wastage": {
+        "title": "Merma",
+        "description": "Cantidad de merma por ingrediente, fecha, nota y personal."
+      },
+      "recipe-usage": {
+        "title": "Uso de recetas",
+        "description": "Estimación de uso de ingredientes según recetas, variantes y complementos."
+      },
+      "stock-reorder": {
+        "title": "Lista de reorden",
+        "description": "Lista sugerida de reabastecimiento según stock actual y umbrales mínimos."
+      },
+      "tax-summary": {
+        "title": "Resumen de impuestos",
+        "description": "Impuestos cobrados por periodo con configuración inclusiva y exclusiva."
+      },
+      "tax-by-item": {
+        "title": "Impuesto por artículo",
+        "description": "Configuración de impuestos y ventas gravables agrupadas por artículo del menú."
+      },
+      "service-charge": {
+        "title": "Cargo por servicio",
+        "description": "Total de cargo por servicio y participación en los ingresos."
+      },
+      "daily-close": {
+        "title": "Cierre diario",
+        "description": "Resumen de fin de día: ventas, pagos, impuestos, cargo por servicio y pedidos sin pagar."
+      },
+      "invoice-register": {
+        "title": "Registro de facturas",
+        "description": "Libro cronológico de facturas para revisión contable."
+      },
+      "reservation-summary": {
+        "title": "Resumen de reservaciones",
+        "description": "Reservaciones por estado, número de personas, fecha y mesa."
+      },
+      "upcoming-reservations": {
+        "title": "Próximas reservaciones",
+        "description": "Reservas futuras con cliente, mesa, número de personas y notas."
+      },
+      "reservation-no-show": {
+        "title": "Reservaciones no presentadas",
+        "description": "Reservas que no generaron actividad en mesa cuando hay datos disponibles."
+      },
+      "feedback-summary": {
+        "title": "Resumen de comentarios",
+        "description": "Calificación promedio, comida, servicio, personal, ambiente y recomendación."
+      },
+      "negative-feedback": {
+        "title": "Comentarios negativos",
+        "description": "Comentarios de baja calificación y observaciones para recuperación del servicio."
+      },
+      "recommendation-score": {
+        "title": "Puntuación de recomendación",
+        "description": "Tendencia y distribución de la calificación de recomendación por periodo."
+      }
+    }
   },
   "qr_menu": {
     "loading_message": "Por favor espera...",
@@ -203,7 +481,7 @@
   "profile": {
     "title": "Mi perfil",
     "name_label": "Nombre:",
-    "designation_label": "Designación:"
+    "designation_label": "Cargo:"
   },
   "print_token": {
     "token_no": "Número de token"
@@ -222,10 +500,10 @@
     "total": "Total",
     "token_no": "Número de token"
   },
- "payment_success": {
-  "title": "¡Éxito!",
-  "message": "🎉 ¡Suscripción creada con éxito! Tu plan ya está activo.",
-  "logout_button": "Ir al panel"
+  "payment_success": {
+    "title": "¡Éxito!",
+    "message": "🎉 ¡Suscripción creada con éxito! Tu plan ya está activo.",
+    "logout_button": "Ir al panel"
   },
   "payment_cancelled": {
     "title": "¡Cancelado!",
@@ -485,7 +763,41 @@
     "repeat_customers": "Clientes recurrentes",
     "view_more_reports": "Ver más datos en informes",
     "loading_message": "Por favor espera...",
-    "error": "¡Error al cargar los detalles!"
+    "error": "¡Error al cargar los detalles!",
+    "greeting_morning": "Buenos días",
+    "greeting_afternoon": "Buenas tardes",
+    "greeting_evening": "Buenas noches",
+    "view_reports": "Ver informes",
+    "todays_revenue": "Ingresos de hoy",
+    "avg_order_value": "Ticket promedio",
+    "new_customers_short": "Clientes nuevos",
+    "order_type_breakdown": "Desglose por tipo de pedido",
+    "payment_mix": "Mezcla de pagos",
+    "cancelled_orders": "Pedidos cancelados",
+    "tax_collected": "Impuestos cobrados",
+    "service_charge": "Cargo por servicio",
+    "vs_yesterday": "vs ayer",
+    "revenue_trend": "Tendencia de ingresos",
+    "last_7_days": "Últimos 7 días",
+    "no_revenue_7_days": "No hay datos de ingresos en los últimos 7 días.",
+    "peak_hours": "Horas pico",
+    "no_sales_today": "Aún no hay datos de ventas hoy.",
+    "today": "Hoy",
+    "chart_revenue": "Ingresos",
+    "chart_orders": "Pedidos",
+    "chart_orders_tooltip": "{{count}} pedidos",
+    "other": "Otro",
+    "total": "Total",
+    "no_data": "No hay datos disponibles.",
+    "top_selling_items_today": "Artículos más vendidos",
+    "no_items_sold_today": "Aún no se han vendido artículos hoy.",
+    "low_stock_alerts": "Alertas de stock bajo",
+    "all_stocked_up": "¡Todo en stock!",
+    "no_items_below_threshold": "Ningún artículo por debajo del umbral.",
+    "recent_feedback": "Comentarios recientes",
+    "no_feedback_yet": "Aún no hay comentarios.",
+    "todays_reservations": "Reservaciones de hoy",
+    "no_reservations_today": "No hay reservaciones hoy."
   },
   "customers": {
     "title": "Clientes",
@@ -1477,5 +1789,4 @@
       "login_again": "Iniciar sesión nuevamente"
     }
   }
-
 }

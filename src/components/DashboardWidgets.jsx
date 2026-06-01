@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
 import {
   IconTrendingUp,
@@ -55,6 +56,7 @@ const chartBaseConfig = {
 
 // ─── KPI Card ─────────────────────────────────────────────────────
 export function KPICard({ label, value, delta, icon: Icon, iconColor, isMoney, currencySymbol }) {
+  const { t } = useTranslation();
   const deltaVal = Number(delta) || 0;
   const isPositive = deltaVal > 0;
   const isNeutral = deltaVal === 0;
@@ -86,7 +88,7 @@ export function KPICard({ label, value, delta, icon: Icon, iconColor, isMoney, c
                 <IconTrendingDown size={12} stroke={2} /> {deltaVal.toFixed(1)}%
               </span>
             )}
-            <span className="text-[11px] text-restro-text">vs yesterday</span>
+            <span className="text-[11px] text-restro-text">{t("dashboard.vs_yesterday")}</span>
           </div>
         </div>
 
@@ -104,22 +106,32 @@ export function KPICard({ label, value, delta, icon: Icon, iconColor, isMoney, c
 
 // ─── Revenue Trend Chart (7 days) ─────────────────────────────────
 export function RevenueTrendChart({ data, currencySymbol }) {
+  const { t, i18n } = useTranslation();
   const categories = useMemo(() => {
     return (data || []).map((d) => {
       const date = new Date(d.date);
-      return date.toLocaleDateString("en", { weekday: "short", month: "short", day: "numeric" });
+      return date.toLocaleDateString(i18n.language, {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      });
     });
-  }, [data]);
+  }, [data, i18n.language]);
 
   const series = useMemo(() => {
-    return [{ name: "Revenue", data: (data || []).map((d) => Number(d.revenue) || 0) }];
-  }, [data]);
+    return [
+      {
+        name: t("dashboard.chart_revenue"),
+        data: (data || []).map((d) => Number(d.revenue) || 0),
+      },
+    ];
+  }, [data, t]);
 
   if (!data || data.length === 0) {
     return (
       <div className="rounded-2xl border border-restro-border-green bg-background p-6">
-        <h3 className="font-bold text-foreground">Revenue Trend</h3>
-        <p className="mt-4 text-sm text-restro-text">No revenue data for the last 7 days.</p>
+        <h3 className="font-bold text-foreground">{t("dashboard.revenue_trend")}</h3>
+        <p className="mt-4 text-sm text-restro-text">{t("dashboard.no_revenue_7_days")}</p>
       </div>
     );
   }
@@ -173,8 +185,8 @@ export function RevenueTrendChart({ data, currencySymbol }) {
   return (
     <div className="rounded-2xl border border-restro-border-green bg-background p-6">
       <div className="flex items-center justify-between mb-1">
-        <h3 className="font-bold text-foreground">Revenue Trend</h3>
-        <span className="text-xs font-semibold text-restro-text">Last 7 days</span>
+        <h3 className="font-bold text-foreground">{t("dashboard.revenue_trend")}</h3>
+        <span className="text-xs font-semibold text-restro-text">{t("dashboard.last_7_days")}</span>
       </div>
       <Chart options={options} series={series} type="area" height={260} />
     </div>
@@ -183,25 +195,29 @@ export function RevenueTrendChart({ data, currencySymbol }) {
 
 // ─── Peak Hours Chart ─────────────────────────────────────────────
 export function PeakHoursChart({ data, currencySymbol }) {
+  const { t, i18n } = useTranslation();
   const fullHours = useMemo(() => {
     const hourMap = {};
     (data || []).forEach((d) => { hourMap[d.hour] = d; });
     return Array.from({ length: 24 }, (_, i) => ({
       hour: i,
-      label: `${i === 0 ? "12" : i > 12 ? i - 12 : i}${i < 12 ? "am" : "pm"}`,
+      label: new Intl.DateTimeFormat(i18n.language, {
+        hour: "numeric",
+        hour12: true,
+      }).format(new Date(2000, 0, 1, i)),
       revenue: Number(hourMap[i]?.revenue || 0),
       orders: Number(hourMap[i]?.orders || 0),
     }));
-  }, [data]);
+  }, [data, i18n.language]);
 
-  const series = [{ name: "Orders", data: fullHours.map((h) => h.orders) }];
+  const series = [{ name: t("dashboard.chart_orders"), data: fullHours.map((h) => h.orders) }];
   const categories = fullHours.map((h) => h.label);
 
   if (!data || data.length === 0) {
     return (
       <div className="rounded-2xl border border-restro-border-green bg-background p-6 h-full">
-        <h3 className="font-bold text-foreground">Peak Hours</h3>
-        <p className="mt-4 text-sm text-restro-text">No sales data yet today.</p>
+        <h3 className="font-bold text-foreground">{t("dashboard.peak_hours")}</h3>
+        <p className="mt-4 text-sm text-restro-text">{t("dashboard.no_sales_today")}</p>
       </div>
     );
   }
@@ -244,7 +260,10 @@ export function PeakHoursChart({ data, currencySymbol }) {
     },
     tooltip: {
       ...chartBaseConfig.tooltip,
-      y: { formatter: (val) => `${val} orders` },
+      y: {
+        formatter: (val) =>
+          t("dashboard.chart_orders_tooltip", { count: val, defaultValue: `${val} orders` }),
+      },
     },
     grid: {
       borderColor: "rgba(156, 163, 175, 0.15)",
@@ -257,8 +276,8 @@ export function PeakHoursChart({ data, currencySymbol }) {
   return (
     <div className="rounded-2xl border border-restro-border-green bg-background p-6 h-full">
       <div className="flex items-center justify-between mb-1">
-        <h3 className="font-bold text-foreground">Peak Hours</h3>
-        <span className="text-xs font-semibold text-restro-text">Today</span>
+        <h3 className="font-bold text-foreground">{t("dashboard.peak_hours")}</h3>
+        <span className="text-xs font-semibold text-restro-text">{t("dashboard.today")}</span>
       </div>
       <Chart options={options} series={series} type="bar" height={220} />
     </div>
@@ -267,7 +286,8 @@ export function PeakHoursChart({ data, currencySymbol }) {
 
 // ─── Donut Chart (generic for Order Type / Payment Mix) ──────────
 export function DonutWidget({ title, data, labelKey, valueKey, valuePrefix, isMoney, currencySymbol }) {
-  const labels = (data || []).map((d) => d[labelKey] || "Other");
+  const { t } = useTranslation();
+  const labels = (data || []).map((d) => d[labelKey] || t("dashboard.other"));
   const values = (data || []).map((d) => Number(d[valueKey]) || 0);
   const total = values.reduce((s, v) => s + v, 0);
 
@@ -275,12 +295,13 @@ export function DonutWidget({ title, data, labelKey, valueKey, valuePrefix, isMo
     return (
       <div className="rounded-2xl border border-restro-border-green bg-background p-6 h-full">
         <h3 className="font-bold text-foreground">{title}</h3>
-        <p className="mt-4 text-sm text-restro-text">No data available.</p>
+        <p className="mt-4 text-sm text-restro-text">{t("dashboard.no_data")}</p>
       </div>
     );
   }
 
   const palette = ["#70B56A", "#4ECDC4", "#FF6B6B", "#FFE66D", "#A78BFA", "#F97316", "#06B6D4", "#EC4899"];
+  const totalLabel = t("dashboard.total");
 
   const options = {
     chart: {
@@ -313,7 +334,7 @@ export function DonutWidget({ title, data, labelKey, valueKey, valuePrefix, isMo
             },
             total: {
               show: true,
-              label: "Total",
+              label: totalLabel,
               fontSize: "12px",
               fontFamily: "Nunito",
               color: "#9ca3af",
@@ -348,19 +369,20 @@ export function DonutWidget({ title, data, labelKey, valueKey, valuePrefix, isMo
 
 // ─── Top Selling Items List ───────────────────────────────────────
 export function TopItemsList({ items, currencySymbol }) {
+  const { t } = useTranslation();
   const maxCount = Math.max(...(items || []).map((i) => Number(i.orders_count) || 0), 1);
 
   return (
     <div className="rounded-2xl border border-restro-border-green bg-background p-6 h-full">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-foreground">Top Selling Items</h3>
-        <span className="text-xs font-semibold text-restro-text">Today</span>
+        <h3 className="font-bold text-foreground">{t("dashboard.top_selling_items_today")}</h3>
+        <span className="text-xs font-semibold text-restro-text">{t("dashboard.today")}</span>
       </div>
 
       {(!items || items.length === 0) ? (
         <div className="flex flex-col items-center justify-center py-8">
           <IconCarrot className="text-restro-text opacity-40 mb-2" size={40} stroke={iconStroke} />
-          <p className="text-sm text-restro-text">No items sold yet today.</p>
+          <p className="text-sm text-restro-text">{t("dashboard.no_items_sold_today")}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -399,10 +421,12 @@ export function TopItemsList({ items, currencySymbol }) {
 
 // ─── Low Stock Alerts ─────────────────────────────────────────────
 export function LowStockAlerts({ items }) {
+  const { t } = useTranslation();
+
   return (
     <div className="rounded-2xl border border-restro-border-green bg-background p-6 h-full">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-foreground">Low Stock Alerts</h3>
+        <h3 className="font-bold text-foreground">{t("dashboard.low_stock_alerts")}</h3>
         <IconAlertTriangle size={18} className="text-amber-500" stroke={iconStroke} />
       </div>
 
@@ -411,8 +435,8 @@ export function LowStockAlerts({ items }) {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30 mb-2">
             <IconTrendingUp className="text-emerald-500" size={24} stroke={iconStroke} />
           </div>
-          <p className="text-sm font-semibold text-foreground">All stocked up!</p>
-          <p className="text-xs text-restro-text mt-1">No items below threshold.</p>
+          <p className="text-sm font-semibold text-foreground">{t("dashboard.all_stocked_up")}</p>
+          <p className="text-xs text-restro-text mt-1">{t("dashboard.no_items_below_threshold")}</p>
         </div>
       ) : (
         <div className="space-y-2.5">
@@ -461,17 +485,19 @@ function StarRating({ rating, size = 14 }) {
 
 // ─── Recent Feedback Widget ───────────────────────────────────────
 export function FeedbackWidget({ feedbacks }) {
+  const { t } = useTranslation();
+
   return (
     <div className="rounded-2xl border border-restro-border-green bg-background p-6 h-full">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-foreground">Recent Feedback</h3>
+        <h3 className="font-bold text-foreground">{t("dashboard.recent_feedback")}</h3>
         <IconStar size={18} className="text-amber-400" stroke={iconStroke} />
       </div>
 
       {(!feedbacks || feedbacks.length === 0) ? (
         <div className="flex flex-col items-center justify-center py-8">
           <IconStar className="text-restro-text opacity-40 mb-2" size={40} stroke={iconStroke} />
-          <p className="text-sm text-restro-text">No feedback yet.</p>
+          <p className="text-sm text-restro-text">{t("dashboard.no_feedback_yet")}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -496,22 +522,24 @@ export function FeedbackWidget({ feedbacks }) {
 
 // ─── Upcoming Reservations Widget ─────────────────────────────────
 export function ReservationWidget({ reservations }) {
+  const { t, i18n } = useTranslation();
+
   return (
     <div className="rounded-2xl border border-restro-border-green bg-background p-6 h-full">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-foreground">Today's Reservations</h3>
+        <h3 className="font-bold text-foreground">{t("dashboard.todays_reservations")}</h3>
         <IconClock size={18} className="text-restro-green" stroke={iconStroke} />
       </div>
 
       {(!reservations || reservations.length === 0) ? (
         <div className="flex flex-col items-center justify-center py-8">
           <IconArmchair2 className="text-restro-text opacity-40 mb-2" size={40} stroke={iconStroke} />
-          <p className="text-sm text-restro-text">No reservations today.</p>
+          <p className="text-sm text-restro-text">{t("dashboard.no_reservations_today")}</p>
         </div>
       ) : (
         <div className="space-y-2.5">
           {reservations.slice(0, 5).map((res, i) => {
-            const time = new Intl.DateTimeFormat("en", {
+            const time = new Intl.DateTimeFormat(i18n.language, {
               hour: "numeric",
               minute: "2-digit",
               hour12: true,

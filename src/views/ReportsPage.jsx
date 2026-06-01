@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import Page from "../components/Page";
 import {
   IconArrowLeft,
@@ -21,15 +22,9 @@ import {
   formatReportValue,
 } from "../utils/reportExports.jsx";
 import { getReportPageComponent } from "./reports/reportPageRegistry.jsx";
+import { DATE_FILTER_KEYS, useReportLabels } from "../helpers/reportI18n";
 
-const DATE_FILTERS = [
-  { key: "today", label: "Today" },
-  { key: "yesterday", label: "Yesterday" },
-  { key: "last_7days", label: "Last 7 Days" },
-  { key: "this_month", label: "This Month" },
-  { key: "last_month", label: "Last Month" },
-  { key: "custom", label: "Custom Range" },
-];
+const ALL_REPORTS_CATEGORY = "All";
 
 const READY_REPORTS = new Set([
   "sales-summary", "gross-sales", "net-sales", "sales-by-hour", "sales-by-day",
@@ -70,15 +65,17 @@ function getCurrencySymbol(currencyCode) {
 }
 
 function ReportStatus({ status }) {
+  const { t } = useTranslation();
   const isReady = status === "ready";
   return (
     <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase ${isReady ? "bg-restro-green-10 text-restro-green" : "bg-restro-bg-gray text-restro-text"}`}>
-      {isReady ? "Ready" : "Planned"}
+      {isReady ? t("reports.status.ready") : t("reports.status.planned")}
     </span>
   );
 }
 
-function ReportCard({ report, onOpen }) {
+function ReportCard({ report, onOpen, reportTitle, reportDescription }) {
+  const { t } = useTranslation();
   const Icon = report.icon;
 
   return (
@@ -95,13 +92,13 @@ function ReportCard({ report, onOpen }) {
       </div>
 
       <div className="mt-4 flex-1">
-        <h3 className="font-bold text-foreground group-hover:text-restro-green">{report.title}</h3>
-        <p className="mt-1 line-clamp-2 text-sm text-restro-text">{report.description}</p>
+        <h3 className="font-bold text-foreground group-hover:text-restro-green">{reportTitle(report)}</h3>
+        <p className="mt-1 line-clamp-2 text-sm text-restro-text">{reportDescription(report)}</p>
       </div>
 
       <div className="mt-4 flex w-full items-center justify-end">
         <span className="flex items-center gap-1 text-xs font-bold text-restro-text opacity-0 transition-all group-hover:text-restro-green group-hover:opacity-100">
-          Open Report <IconChevronRight size={14} stroke={iconStroke} />
+          {t("reports.index.open_report")} <IconChevronRight size={14} stroke={iconStroke} />
         </span>
       </div>
     </button>
@@ -109,16 +106,18 @@ function ReportCard({ report, onOpen }) {
 }
 
 function ReportsIndex() {
+  const { t } = useTranslation();
+  const { categoryLabel, reportTitle, reportDescription } = useReportLabels();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState(ALL_REPORTS_CATEGORY);
   const normalizedQuery = query.trim().toLowerCase();
 
   const groupedReports = useMemo(() => {
     return REPORT_CATEGORIES.map((categoryName) => {
       const reports = REPORT_CATALOG.filter((report) => {
         if (report.category !== categoryName) return false;
-        if (category !== "All" && report.category !== category) return false;
+        if (category !== ALL_REPORTS_CATEGORY && report.category !== category) return false;
         if (!normalizedQuery) return true;
 
         const searchable = [
@@ -126,6 +125,9 @@ function ReportsIndex() {
           report.category,
           report.description,
           report.priority,
+          reportTitle(report),
+          reportDescription(report),
+          categoryLabel(report.category),
           ...(report.keywords || []),
         ].join(" ").toLowerCase();
 
@@ -134,7 +136,7 @@ function ReportsIndex() {
 
       return { category: categoryName, reports };
     }).filter((group) => group.reports.length > 0);
-  }, [category, normalizedQuery]);
+  }, [category, normalizedQuery, categoryLabel, reportTitle, reportDescription]);
 
   const readyReports = REPORT_CATALOG.filter((report) => report.status === "ready").length;
 
@@ -145,23 +147,29 @@ function ReportsIndex() {
         <aside className="w-full md:w-60 lg:w-64 shrink-0">
           <div className="sticky top-20 md:top-24">
             <div className="mb-6 md:mb-8">
-              <h1 className="text-3xl font-bold tracking-tight text-foreground">Reports</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("reports.title")}</h1>
               <p className="mt-2 text-sm text-restro-text">
-                Analyze your performance. <span className="font-medium text-foreground">{readyReports} available</span>.
+                {t("reports.index.subtitle")}{" "}
+                <span className="font-medium text-foreground">
+                  {t("reports.index.available_count", { count: readyReports })}
+                </span>
+                .
               </p>
             </div>
 
             {/* Categories */}
             <div>
-              <h3 className="mb-3 hidden text-xs font-bold uppercase tracking-wider text-restro-text md:block">Categories</h3>
+              <h3 className="mb-3 hidden text-xs font-bold uppercase tracking-wider text-restro-text md:block">
+                {t("reports.index.categories_heading")}
+              </h3>
               <div className="custom-scroll-wrapper flex gap-2 overflow-x-auto pb-2 md:flex-col md:overflow-visible md:pb-0 md:after:hidden">
                 <button
                   type="button"
-                  onClick={() => setCategory("All")}
-                  className={`flex h-10 shrink-0 items-center justify-between rounded-lg px-4 text-sm font-semibold transition md:h-auto md:shrink md:py-2.5 ${category === "All" ? "bg-restro-green text-white shadow-md md:shadow-sm" : "bg-restro-bg-gray text-restro-text hover:bg-restro-border-green hover:text-foreground md:bg-transparent md:hover:bg-restro-bg-gray"}`}
+                  onClick={() => setCategory(ALL_REPORTS_CATEGORY)}
+                  className={`flex h-10 shrink-0 items-center justify-between rounded-lg px-4 text-sm font-semibold transition md:h-auto md:shrink md:py-2.5 ${category === ALL_REPORTS_CATEGORY ? "bg-restro-green text-white shadow-md md:shadow-sm" : "bg-restro-bg-gray text-restro-text hover:bg-restro-border-green hover:text-foreground md:bg-transparent md:hover:bg-restro-bg-gray"}`}
                 >
-                  <span>All Reports</span>
-                  <span className={`hidden md:block rounded-full px-2 py-0.5 text-[10px] ${category === "All" ? "bg-white/20" : "bg-restro-border-green"}`}>{REPORT_CATALOG.length}</span>
+                  <span>{t("reports.index.all_reports")}</span>
+                  <span className={`hidden md:block rounded-full px-2 py-0.5 text-[10px] ${category === ALL_REPORTS_CATEGORY ? "bg-white/20" : "bg-restro-border-green"}`}>{REPORT_CATALOG.length}</span>
                 </button>
                 {REPORT_CATEGORIES.map((categoryName) => {
                   const isSelected = category === categoryName;
@@ -173,7 +181,7 @@ function ReportsIndex() {
                       onClick={() => setCategory(categoryName)}
                       className={`flex h-10 shrink-0 items-center justify-between rounded-lg px-4 text-sm font-semibold transition md:h-auto md:shrink md:py-2.5 ${isSelected ? "bg-restro-text text-white shadow-md md:shadow-sm" : "bg-restro-bg-gray text-restro-text hover:bg-restro-border-green hover:text-foreground md:bg-transparent md:hover:bg-restro-bg-gray"}`}
                     >
-                      <span>{categoryName}</span>
+                      <span>{categoryLabel(categoryName)}</span>
                       <span className={`hidden md:block rounded-full px-2 py-0.5 text-[10px] ${isSelected ? "bg-white/20 text-white" : "bg-restro-border-green text-restro-text"}`}>{count}</span>
                     </button>
                   );
@@ -193,7 +201,7 @@ function ReportsIndex() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 className="h-10 w-full rounded-xl border-none bg-transparent pl-11 pr-4 text-sm outline-none transition focus:ring-0 md:h-12"
-                placeholder="Search reports by name, keyword, or category..."
+                placeholder={t("reports.index.search_placeholder")}
               />
             </div>
           </div>
@@ -203,12 +211,18 @@ function ReportsIndex() {
             {groupedReports.map((group) => (
               <section key={group.category}>
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-bold text-foreground">{group.category}</h2>
+                  <h2 className="text-lg font-bold text-foreground">{categoryLabel(group.category)}</h2>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {group.reports.map((report) => (
-                    <ReportCard key={report.id} report={report} onOpen={(selectedReport) => navigate(`/dashboard/reports/${selectedReport.id}`)} />
+                    <ReportCard
+                      key={report.id}
+                      report={report}
+                      reportTitle={reportTitle}
+                      reportDescription={reportDescription}
+                      onOpen={(selectedReport) => navigate(`/dashboard/reports/${selectedReport.id}`)}
+                    />
                   ))}
                 </div>
               </section>
@@ -218,13 +232,13 @@ function ReportsIndex() {
           {groupedReports.length === 0 && (
             <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border border-dashed border-restro-border-green bg-background py-20 text-center">
               <IconSearch className="mb-4 text-restro-text opacity-50" size={48} stroke={iconStroke} />
-              <h3 className="text-lg font-bold text-foreground">No reports found</h3>
-              <p className="mt-1 text-restro-text">Try adjusting your search or filter criteria.</p>
+              <h3 className="text-lg font-bold text-foreground">{t("reports.index.no_results_title")}</h3>
+              <p className="mt-1 text-restro-text">{t("reports.index.no_results_message")}</p>
               <button
-                onClick={() => { setQuery(""); setCategory("All"); }}
+                onClick={() => { setQuery(""); setCategory(ALL_REPORTS_CATEGORY); }}
                 className="mt-4 rounded-lg bg-restro-bg-gray px-4 py-2 text-sm font-bold text-foreground hover:bg-restro-border-green"
               >
-                Clear Filters
+                {t("reports.index.clear_filters")}
               </button>
             </div>
           )}
@@ -250,6 +264,8 @@ function SummaryGrid({ summary, currency }) {
 }
 
 function DataTable({ table, currency }) {
+  const { t } = useTranslation();
+
   return (
     <div className="overflow-hidden rounded-xl border border-restro-border-green bg-background shadow-sm">
       <div className="border-b border-restro-border-green bg-restro-bg-gray/30 px-5 py-4">
@@ -271,7 +287,7 @@ function DataTable({ table, currency }) {
             {(table.rows || []).length === 0 && (
               <tr>
                 <td colSpan={(table.columns || []).length || 1} className="py-12 text-center text-restro-text">
-                  No data available for this period.
+                  {t("reports.detail.no_table_data")}
                 </td>
               </tr>
             )}
@@ -292,19 +308,20 @@ function DataTable({ table, currency }) {
 }
 
 function ReportFilterBar({ state, setState, isLoading }) {
+  const { t } = useTranslation();
   const isCustom = state.filter === "custom";
 
   return (
     <div className="rounded-xl border border-restro-border-green bg-background p-2 shadow-sm">
       <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
         <div className="custom-scroll-wrapper flex gap-1 overflow-x-auto pb-1 xl:pb-0">
-          {DATE_FILTERS.map((filter) => (
+          {DATE_FILTER_KEYS.map((filterKey) => (
             <button
-              key={filter.key}
+              key={filterKey}
               type="button"
               disabled={isLoading}
               onClick={() => {
-                if (filter.key === "custom") {
+                if (filterKey === "custom") {
                   setState((current) => ({
                     filter: "custom",
                     fromDate: current.fromDate || getDefaultDate(-6),
@@ -312,11 +329,11 @@ function ReportFilterBar({ state, setState, isLoading }) {
                   }));
                   return;
                 }
-                setState({ filter: filter.key, fromDate: null, toDate: null });
+                setState({ filter: filterKey, fromDate: null, toDate: null });
               }}
-              className={`h-10 shrink-0 rounded-lg px-4 text-sm font-semibold transition ${state.filter === filter.key ? "bg-restro-text text-white shadow-md" : "text-restro-text hover:bg-restro-bg-gray hover:text-foreground"} disabled:opacity-50`}
+              className={`h-10 shrink-0 rounded-lg px-4 text-sm font-semibold transition ${state.filter === filterKey ? "bg-restro-text text-white shadow-md" : "text-restro-text hover:bg-restro-bg-gray hover:text-foreground"} disabled:opacity-50`}
             >
-              {filter.label}
+              {t(`reports.filters.${filterKey}`)}
             </button>
           ))}
         </div>
@@ -324,7 +341,7 @@ function ReportFilterBar({ state, setState, isLoading }) {
         {isCustom && (
           <div className="flex items-center gap-2 xl:w-auto">
             <div className="flex items-center rounded-lg border border-restro-border-green bg-background px-2 focus-within:border-restro-green">
-              <span className="text-xs font-bold text-restro-text">From</span>
+              <span className="text-xs font-bold text-restro-text">{t("reports.from")}</span>
               <input
                 type="date"
                 value={state.fromDate || getDefaultDate(-6)}
@@ -334,7 +351,7 @@ function ReportFilterBar({ state, setState, isLoading }) {
             </div>
             <span className="text-restro-text">-</span>
             <div className="flex items-center rounded-lg border border-restro-border-green bg-background px-2 focus-within:border-restro-green">
-              <span className="text-xs font-bold text-restro-text">To</span>
+              <span className="text-xs font-bold text-restro-text">{t("reports.to")}</span>
               <input
                 type="date"
                 value={state.toDate || getDefaultDate()}
@@ -350,6 +367,8 @@ function ReportFilterBar({ state, setState, isLoading }) {
 }
 
 function ExportMenu({ isExporting, data, onExport }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center gap-2">
       <button
@@ -358,7 +377,7 @@ function ExportMenu({ isExporting, data, onExport }) {
         onClick={() => onExport("excel")}
         className="flex h-10 items-center gap-2 rounded-lg border border-restro-border-green bg-background px-4 text-sm font-bold text-foreground transition hover:bg-restro-bg-gray disabled:opacity-50"
       >
-        <IconFileSpreadsheet size={18} stroke={iconStroke} /> Excel
+        <IconFileSpreadsheet size={18} stroke={iconStroke} /> {t("reports.detail.export_excel")}
       </button>
       <button
         type="button"
@@ -366,13 +385,15 @@ function ExportMenu({ isExporting, data, onExport }) {
         onClick={() => onExport("pdf")}
         className="flex h-10 items-center gap-2 rounded-lg bg-restro-green px-4 text-sm font-bold text-white transition hover:bg-restro-green/90 disabled:opacity-50"
       >
-        <IconDownload size={18} stroke={iconStroke} /> PDF
+        <IconDownload size={18} stroke={iconStroke} /> {t("reports.detail.export_pdf")}
       </button>
     </div>
   );
 }
 
 function PlannedReport({ report }) {
+  const { t } = useTranslation();
+  const { categoryLabel, reportTitle, reportDescription } = useReportLabels();
   const Icon = report.icon;
   const navigate = useNavigate();
 
@@ -380,7 +401,7 @@ function PlannedReport({ report }) {
     <Page className="bg-restro-bg-gray/20 px-4 py-8">
       <div className="mx-auto max-w-4xl">
         <button type="button" onClick={() => navigate("/dashboard/reports")} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-restro-text transition hover:text-foreground">
-          <IconArrowLeft size={18} stroke={iconStroke} /> Back to Reports
+          <IconArrowLeft size={18} stroke={iconStroke} /> {t("reports.detail.back")}
         </button>
 
         <div className="rounded-2xl border border-restro-border-green bg-background p-8 shadow-sm md:p-10">
@@ -389,15 +410,18 @@ function PlannedReport({ report }) {
               <Icon size={32} stroke={iconStroke} />
             </span>
             <div>
-              <p className="text-sm font-bold uppercase tracking-wider text-restro-green">{report.category}</p>
-              <h1 className="mt-1 text-3xl font-bold text-foreground">{report.title}</h1>
-              <p className="mt-3 text-lg text-restro-text">{report.description}</p>
+              <p className="text-sm font-bold uppercase tracking-wider text-restro-green">{categoryLabel(report.category)}</p>
+              <h1 className="mt-1 text-3xl font-bold text-foreground">{reportTitle(report)}</h1>
+              <p className="mt-3 text-lg text-restro-text">{reportDescription(report)}</p>
             </div>
           </div>
 
           <div className="mt-10 flex items-center gap-3 rounded-xl border border-dashed border-restro-border-green bg-restro-bg-gray/30 p-5 text-restro-text">
             <IconLoader2 className="animate-spin text-restro-green" size={24} />
-            <p>This report is planned for a later phase and is currently being tracked in <span className="font-bold text-foreground">docs/reports-roadmap.md</span>.</p>
+            <p>
+              {t("reports.detail.planned_message")}{" "}
+              <span className="font-bold text-foreground">{t("reports.detail.planned_doc")}</span>.
+            </p>
           </div>
         </div>
       </div>
@@ -406,6 +430,8 @@ function PlannedReport({ report }) {
 }
 
 function ReportDetail({ report }) {
+  const { t } = useTranslation();
+  const { categoryLabel, reportTitle } = useReportLabels();
   const navigate = useNavigate();
   const ReportPageComponent = getReportPageComponent(report.id);
   const [filterState, setFilterState] = useState({ filter: "today", fromDate: null, toDate: null });
@@ -417,7 +443,9 @@ function ReportDetail({ report }) {
     to: filterState.toDate,
   });
 
-  const filterLabel = DATE_FILTERS.find((filter) => filter.key === filterState.filter)?.label || filterState.filter;
+  const filterLabel = t(`reports.filters.${filterState.filter}`, {
+    defaultValue: filterState.filter,
+  });
   const currency = getCurrencySymbol(data?.currency);
 
   const exportReport = async (format) => {
@@ -428,10 +456,12 @@ function ReportDetail({ report }) {
       } else {
         await exportReportToPdf(data, currency, filterLabel);
       }
-      toast.success(`${format === "excel" ? "Excel" : "PDF"} report exported`);
+      const formatLabel =
+        format === "excel" ? t("reports.detail.export_excel") : t("reports.detail.export_pdf");
+      toast.success(t("reports.detail.export_success", { format: formatLabel }));
     } catch (error) {
       console.error(error);
-      toast.error("Could not export report. Please try again.");
+      toast.error(t("reports.detail.export_error"));
     } finally {
       setIsExporting(false);
     }
@@ -441,7 +471,7 @@ function ReportDetail({ report }) {
     <Page className="bg-restro-bg-gray/20 px-4 py-8">
       <div className="mx-auto max-w-7xl">
         <button type="button" onClick={() => navigate("/dashboard/reports")} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-restro-text transition hover:text-foreground">
-          <IconArrowLeft size={18} stroke={iconStroke} /> Back to Reports
+          <IconArrowLeft size={18} stroke={iconStroke} /> {t("reports.detail.back")}
         </button>
 
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -450,10 +480,13 @@ function ReportDetail({ report }) {
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-restro-green-10 text-restro-green">
                 <report.icon size={18} stroke={iconStroke} />
               </span>
-              <p className="text-sm font-bold uppercase tracking-wider text-restro-green">{report.category}</p>
+              <p className="text-sm font-bold uppercase tracking-wider text-restro-green">{categoryLabel(report.category)}</p>
             </div>
-            <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{report.title}</h1>
-            <p className="mt-2 text-restro-text">Showing data for <span className="font-semibold text-foreground">{filterLabel}</span></p>
+            <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{reportTitle(report)}</h1>
+            <p className="mt-2 text-restro-text">
+              {t("reports.detail.showing_data_for")}{" "}
+              <span className="font-semibold text-foreground">{filterLabel}</span>
+            </p>
           </div>
 
           <ExportMenu isExporting={isExporting} data={data} onExport={exportReport} />
@@ -466,14 +499,14 @@ function ReportDetail({ report }) {
         {isLoading && (
           <div className="mt-10 flex min-h-[40vh] flex-col items-center justify-center gap-4 text-restro-text">
             <IconLoader2 className="animate-spin text-restro-green" size={40} stroke={iconStroke} />
-            <p className="font-medium">Crunching the numbers...</p>
+            <p className="font-medium">{t("reports.detail.loading")}</p>
           </div>
         )}
 
         {error && (
           <div className="mt-10 rounded-2xl border border-dashed border-red-200 bg-red-50 p-10 text-center text-red-600 dark:border-red-900/50 dark:bg-red-950/20">
-            <h3 className="text-lg font-bold">Failed to load report</h3>
-            <p className="mt-1 text-sm opacity-80">There was a problem fetching this data. Please try again later.</p>
+            <h3 className="text-lg font-bold">{t("reports.detail.load_error_title")}</h3>
+            <p className="mt-1 text-sm opacity-80">{t("reports.detail.load_error_message")}</p>
           </div>
         )}
 
@@ -492,6 +525,7 @@ function ReportDetail({ report }) {
 }
 
 export default function ReportsPage() {
+  const { t } = useTranslation();
   const { reportId } = useParams();
   const selectedReport = REPORT_CATALOG.find((report) => report.id === reportId);
 
@@ -499,8 +533,8 @@ export default function ReportsPage() {
     return (
       <Page className="flex min-h-[50vh] items-center justify-center px-4 py-8">
         <div className="rounded-xl border border-restro-border-green bg-background p-10 text-center shadow-sm">
-          <h2 className="text-xl font-bold text-foreground">Report Not Found</h2>
-          <p className="mt-2 text-restro-text">The report you are looking for doesn't exist or has been moved.</p>
+          <h2 className="text-xl font-bold text-foreground">{t("reports.detail.not_found_title")}</h2>
+          <p className="mt-2 text-restro-text">{t("reports.detail.not_found_message")}</p>
         </div>
       </Page>
     );

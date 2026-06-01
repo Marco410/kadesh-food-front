@@ -33,3 +33,6 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+.pnpm-store/v11/index.db
+pnpm-workspace.yaml
+pnpm-lock.yaml
