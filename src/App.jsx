@@ -92,13 +92,12 @@ export default function App() {
 
           <Route path="/dashboard/inactive-subscription" element={<InActiveSubscriptionPage />} />
 
-          <Route path="/m/:qrcode" element={<QRMenuPage />} />
-          <Route path="/m/:qrcode/cart" element={<CartPage />} />
           <Route path="/m/order-success" element={<OrderSuccessPage />} />
           <Route path="/m/order-failed" element={<OrderFailedPage />} />
-
-          <Route path="/m/:qrcode/feedback" element={<FeedbackCollectPage />} />
+          <Route path="/m/:qrcode/cart" element={<CartPage />} />
           <Route path="/m/:qrcode/feedback/success" element={<FeedbackCollectSuccessPage />} />
+          <Route path="/m/:qrcode/feedback" element={<FeedbackCollectPage />} />
+          <Route path="/m/:qrcode" element={<QRMenuPage />} />
 
 
           {/* app routes */}
