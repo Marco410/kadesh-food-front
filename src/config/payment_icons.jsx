@@ -1,4 +1,4 @@
-import { IconBrandPaypal, IconBuildingBank, IconCash, IconCreditCard, IconDeviceIpad, IconDiscount, IconQrcode, IconWallet } from "@tabler/icons-react";
+import { IconBrandPaypal, IconBuildingBank, IconCash, IconCreditCard, IconDeviceIpad, IconDiscount, IconQrcode, IconWallet, IconBrandUber, IconLetterD, IconMoustache } from "@tabler/icons-react";
 import { iconStroke } from "./config";
 
 export const PAYMENT_ICONS = {
