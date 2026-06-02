@@ -608,6 +608,15 @@
     "title": "¡Ups! ¡No tienes acceso a esta área! Vuelve a iniciar sesión para verificar nuevamente.",
     "go_back": "Regresar"
   },
+  "not_found": {
+    "title": "Esta página no está en el menú",
+    "subtitle": "No encontramos lo que buscas. El enlace puede estar desactualizado o la dirección tener un error.",
+    "hint": "Puedes volver atrás o ir a un lugar seguro con los botones de abajo.",
+    "go_dashboard": "Ir al panel",
+    "go_login": "Iniciar sesión",
+    "go_back": "Volver atrás",
+    "img_alt": "Página no encontrada"
+  },
   "kitchen": {
     "title": "Cocina",
     "refresh": "Actualizar",

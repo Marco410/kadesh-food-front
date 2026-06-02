@@ -608,6 +608,15 @@
     "title": "Oops! You don't have access to this area! Relogin to check again.",
     "go_back": "Go back"
   },
+  "not_found": {
+    "title": "This page took a wrong turn",
+    "subtitle": "We couldn't find what you're looking for. The link may be outdated or the address might have a typo.",
+    "hint": "Try going back, or head to a safe place below.",
+    "go_dashboard": "Go to dashboard",
+    "go_login": "Sign in",
+    "go_back": "Go back",
+    "img_alt": "Page not found"
+  },
   "kitchen": {
     "title": "Kitchen",
     "refresh": "Refresh",
