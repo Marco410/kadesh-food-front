@@ -27,15 +27,12 @@ export default function SubscriptionDetails() {
     const subscriptionId = data?.subscription_id;
     const paymentGateway = data?.payment_gateway;
 
+    const subscriptionEndDate = String(data?.subscription_end).substring(0, 10);
+
     const isConfirm = data?.isTrialPlan
       ? window.confirm(t("subscription.cancel_confirm"))
       : window.confirm(
-          `Do you want to cancel this plan? You’ll retain access until ${String(
-            data?.subscription_end
-          ).substring(
-            0,
-            10
-          )}, after which your subscription will end and you won't be charged further.`
+          t("subscription.cancel_confirm_period_end", { date: subscriptionEndDate })
         );
 
     if (!isConfirm) {
@@ -141,7 +138,7 @@ export default function SubscriptionDetails() {
             onClick={btnManageSubscription}
             className="w-full block mt-4 bg-restro-green-10 text-restro-green px-4 py-2 rounded-2xl transition hover:bg-restro-green-10 active:scale-95 text-sm"
           >
-            {t("Manage Subscription")}
+            {t("subscription.manage_subscription")}
           </button>
         </div>
       ) : (

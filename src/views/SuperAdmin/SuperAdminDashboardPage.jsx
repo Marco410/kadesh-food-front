@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export default function SuperAdminDashboardPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const { data, error, isLoading } = useSuperAdminDashboard();
 
@@ -43,7 +43,7 @@ export default function SuperAdminDashboardPage() {
 
         <div className='md:row-span-3 bg-restro-superadmin-widget-bg rounded-[42px]'>
           <p className='text-restro-superadmin-text-green font-bold text-center mt-4'>{t('superadmin_dashboard.active_tenants')}</p>
-          <p className='text-white font-black text-7xl text-center'>{Number(activeTenants).toLocaleString("en", {
+          <p className='text-white font-black text-7xl text-center'>{Number(activeTenants).toLocaleString(i18n.language, {
             notation: "compact"
           })}</p>
           <img src={ImgGirlSmiling} alt="img" className='block h-96 mx-auto mt-10' />
@@ -51,12 +51,12 @@ export default function SuperAdminDashboardPage() {
 
         <div className='rounded-[42px] border px-8 py-5 flex flex-col justify-center border-restro-border-green'>
           <p className='font-bold'>{t('superadmin_dashboard.mrr')}</p>
-          <p className='font-black text-5xl mt-2 text-restro-text '>${Number(mrrValue).toLocaleString('en',{notation: "compact"})}</p>
+          <p className='font-black text-5xl mt-2 text-restro-text '>${Number(mrrValue).toLocaleString(i18n.language, { notation: "compact" })}</p>
         </div>
 
         <div className='rounded-[42px] border px-8 py-5 flex flex-col justify-center border-restro-border-green'>
           <p className='font-bold'>{t('superadmin_dashboard.arr')}</p>
-          <p className='font-black text-5xl text-restro-green mt-2'>${Number(arrValue).toLocaleString('en',{notation: "compact"})}</p>
+          <p className='font-black text-5xl text-restro-green mt-2'>${Number(arrValue).toLocaleString(i18n.language, { notation: "compact" })}</p>
         </div>
 
         <div className='border rounded-[42px] px-8 py-5 flex flex-col justify-center border-restro-border-green'>
@@ -65,13 +65,13 @@ export default function SuperAdminDashboardPage() {
             <div className='tooltip cursor-pointer tooltip-top' data-tip={t('superadmin_dashboard.store_sales_info')}><IconInfoCircleFilled size={18} stroke={iconStroke}/></div>
           </div>
           <p className='font-black text-5xl mt-2 text-restro-text'>
-            ${Number(salesVolumeToday).toLocaleString("en", {notation: "compact"})}
+            ${Number(salesVolumeToday).toLocaleString(i18n.language, { notation: "compact" })}
           </p>
         </div>
 
         <div className='rounded-[42px] border px-8 py-5 flex flex-col justify-center border-restro-border-green'>
           <p className='font-bold'>{t('superadmin_dashboard.orders_processed')}</p>
-          <p className='font-black text-5xl mt-2 text-restro-text'>{Number(ordersProcessedToday).toLocaleString("en",{notation: "compact"})}</p>
+          <p className='font-black text-5xl mt-2 text-restro-text'>{Number(ordersProcessedToday).toLocaleString(i18n.language, { notation: "compact" })}</p>
         </div>
 
         <Link to="/superadmin/dashboard/reports" className='flex items-center justify-center gap-2 rounded-[42px] border px-8 py-5 md:col-span-2 transition active:scale-95 font-bold border-restro-border-green hover:bg-restro-button-hover '>

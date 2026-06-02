@@ -3,7 +3,7 @@ import { getDetailsForReceiptPrint } from "../helpers/ReceiptHelper";
 import { useTranslation } from "react-i18next";
 
 export default function PrintTokenPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const receiptDetails = getDetailsForReceiptPrint();
 
   const {
@@ -51,7 +51,7 @@ export default function PrintTokenPage() {
         </div>
       </div>
 
-      <p className="mt-2 text-center">{new Date().toLocaleString('en-US', {hour12: true, dateStyle: "long", timeStyle: "short"})}</p>
+      <p className="mt-2 text-center">{new Date().toLocaleString(i18n.language, { hour12: true, dateStyle: "long", timeStyle: "short" })}</p>
     </div>
   );
 }

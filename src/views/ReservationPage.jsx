@@ -29,7 +29,7 @@ import DialogAddCustomer from '../components/DialogAddCustomer';
 import { useTheme } from "../contexts/ThemeContext";
 
 export default function ReservationPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {theme} = useTheme();
 
   const { role, scope } = getUserDetailsInLocalStorage();
@@ -431,19 +431,19 @@ export default function ReservationPage() {
             } = reservation;
 
             const dateObj = new Date(date);
-            const createdAt = new Date(created_at).toLocaleString("en", {
+            const createdAt = new Date(created_at).toLocaleString(i18n.language, {
               dateStyle: "medium",
               timeStyle: "short",
             });
 
-            const dateLocal = dateObj.toLocaleDateString("en", {
+            const dateLocal = dateObj.toLocaleDateString(i18n.language, {
               dateStyle: "medium",
             });
-            const timeLocal = dateObj.toLocaleTimeString("en", {
+            const timeLocal = dateObj.toLocaleTimeString(i18n.language, {
               timeStyle: "short",
             });
             
-            const localDateTime = new Date(dateObj.toLocaleString('en'));
+            const localDateTime = new Date(dateObj.toLocaleString(i18n.language));
             const dateFormatted = `${localDateTime.getFullYear()}-${(localDateTime.getMonth()+1).toString().padStart(2, '0')}-${(localDateTime.getDate()).toString().padStart(2, '0')} ${(localDateTime.getHours()).toString().padStart(2, '0')}:${(localDateTime.getMinutes()).toString().padStart(2, '0')}:${(localDateTime.getSeconds()).toString().padStart(2, '0')}`;
 
             return <ReservationCard
@@ -503,19 +503,19 @@ export default function ReservationPage() {
             
 
             const dateObj = new Date(date);
-            const createdAt = new Date(created_at).toLocaleString("en", {
+            const createdAt = new Date(created_at).toLocaleString(i18n.language, {
               dateStyle: "medium",
               timeStyle: "short",
             });
 
-            const dateLocal = dateObj.toLocaleDateString("en", {
+            const dateLocal = dateObj.toLocaleDateString(i18n.language, {
               dateStyle: "medium",
             });
-            const timeLocal = dateObj.toLocaleTimeString("en", {
+            const timeLocal = dateObj.toLocaleTimeString(i18n.language, {
               timeStyle: "short",
             });
             
-            const localDateTime = new Date(dateObj.toLocaleString('en'));
+            const localDateTime = new Date(dateObj.toLocaleString(i18n.language));
             const dateFormatted = `${localDateTime.getFullYear()}-${(localDateTime.getMonth()+1).toString().padStart(2, '0')}-${(localDateTime.getDate()).toString().padStart(2, '0')} ${(localDateTime.getHours()).toString().padStart(2, '0')}:${(localDateTime.getMinutes()).toString().padStart(2, '0')}:${(localDateTime.getSeconds()).toString().padStart(2, '0')}`;
 
             return <ReservationCard

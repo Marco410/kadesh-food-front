@@ -65,6 +65,7 @@ import SuperAdminPlansPage from "./views/SuperAdmin/SuperAdminPlansPage";
 import SuperAdminPlanDetails from "./views/SuperAdmin/SuperAdminPlanDetails";
 import SuperAdminPaymentGatewaysPage from "./views/SuperAdmin/SuperAdminPaymentGatewaysPage";
 import RefreshPage from "./views/RefreshPage";
+import NotFoundPage from "./views/NotFoundPage";
 
 export default function App() {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(
@@ -91,13 +92,12 @@ export default function App() {
 
           <Route path="/dashboard/inactive-subscription" element={<InActiveSubscriptionPage />} />
 
-          <Route path="/m/:qrcode" element={<QRMenuPage />} />
-          <Route path="/m/:qrcode/cart" element={<CartPage />} />
           <Route path="/m/order-success" element={<OrderSuccessPage />} />
           <Route path="/m/order-failed" element={<OrderFailedPage />} />
-
-          <Route path="/m/:qrcode/feedback" element={<FeedbackCollectPage />} />
+          <Route path="/m/:qrcode/cart" element={<CartPage />} />
           <Route path="/m/:qrcode/feedback/success" element={<FeedbackCollectSuccessPage />} />
+          <Route path="/m/:qrcode/feedback" element={<FeedbackCollectPage />} />
+          <Route path="/m/:qrcode" element={<QRMenuPage />} />
 
 
           {/* app routes */}
@@ -286,6 +286,7 @@ export default function App() {
               <Route path="tax-setup" element={<TaxSetupPage />} />
               <Route path="payment-types" element={<PaymentTypesPage />} />
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           {/* app routes */}
 
@@ -304,10 +305,11 @@ export default function App() {
             <Route path="reports" element={<SuperAdminProtectedRoute><SuperAdminReportsPage /></SuperAdminProtectedRoute>} />
             <Route path="contact-support" element={<SuperAdminProtectedRoute><SuperAdminContactSupportPage /></SuperAdminProtectedRoute>} />
             <Route path="language" element={<LanguagePage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
           {/* superadmin routes */}
 
-
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         {/* <Toaster  /> */}
         <MyToaster />

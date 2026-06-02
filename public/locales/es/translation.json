@@ -16,8 +16,8 @@
     "error_message": "¡Algo salió mal!"
   },
   "home": {
-    "cafe_restaurant": "Café. Restaurante.",
-    "hotel_bar": "Hotel. Bar."
+    "cafe_restaurant": "Vende más.",
+    "hotel_bar": "Administra menos."
   },
   "register": {
     "title": "Registrarse",
@@ -102,7 +102,8 @@
     "SETTINGS": "Configuración",
     "REPORTS": "Informes",
     "FEEDBACK": "Comentarios",
-    "USER": "Usuarios"
+    "USER": "Usuarios",
+    "QRMENU": "Menú QR"
   },
   "reset_password": {
     "title": "Restablecer contraseña",
@@ -235,6 +236,36 @@
       "export_pdf": "PDF",
       "export_success": "Informe {{format}} exportado",
       "export_error": "No se pudo exportar el informe. Inténtalo de nuevo."
+    },
+    "chart_titles": {
+      "snapshot": "Resumen de {{title}}",
+      "sales_trend": "Tendencia de ventas",
+      "sales_breakdown": "Desglose de ventas",
+      "hourly_sales_heatmap": "Mapa de calor de ventas por hora",
+      "revenue_by_order_type": "Ingresos por tipo de pedido",
+      "table_revenue_map": "Mapa de ingresos por mesa",
+      "payment_mix": "Mezcla de pagos",
+      "payment_volume": "Volumen de pagos",
+      "amount_progress": "Evolución de monto — {{title}}",
+      "transactions_by_date": "Transacciones por fecha — {{title}}",
+      "menu_performance": "Rendimiento del menú",
+      "revenue_contribution_map": "Mapa de contribución de ingresos",
+      "quantity_movement": "Movimiento de cantidades",
+      "inventory_quantity_view": "Vista de cantidades de inventario",
+      "stock_pressure_map": "Mapa de presión de stock",
+      "movement_heatmap": "Mapa de calor de movimientos",
+      "customer_activity": "Actividad de clientes",
+      "customer_order_volume": "Volumen de pedidos por cliente",
+      "operational_volume": "Volumen operativo",
+      "status_payment_heatmap": "Mapa de calor: estado y pago",
+      "table_activity_map": "Mapa de actividad por mesa",
+      "accounting_trend": "Tendencia contable",
+      "accounting_breakdown": "Desglose contable",
+      "reservation_volume": "Volumen de reservaciones",
+      "reservation_heatmap": "Mapa de calor de reservaciones",
+      "feedback_scores": "Puntuaciones de comentarios",
+      "rating_dimension_radar": "Radar de dimensiones de calificación",
+      "recommendation_mix": "Mezcla de recomendaciones"
     },
     "categories": {
       "sales": "Ventas",
@@ -489,6 +520,8 @@
   "print_receipt": {
     "phone": "Teléfono",
     "email": "Correo electrónico",
+    "customer_walkin": "Cliente sin registro",
+    "customer_registered": "Cliente",
     "order_type": "Tipo de pedido",
     "payment_method": "Método de pago",
     "receipt_no": "Número de recibo",
@@ -558,18 +591,31 @@
     "error_processing_request": "Error de procesar su solicitud, ¡intente más tarde!",
     "please_finish_order_for_feedback_message": "¡Termine el pedido para recopilar comentarios!",
     "no_orders_img_alt": "Sin pedidos",
-    "dine_out_or_delivery": "Cenar / entrega",
+    "dine_out_or_delivery": "Para llevar / entrega",
     "addons": "Complementos:",
     "notes": "Notas:",
     "or": "O",
     "feedback_qr_img_alt": "Comentarios QR",
     "payment_not_collected_error": "La acción no se puede procesar porque el pago no se ha recopilado. ",
     "payment_already_collected_error": "PagoYa cobrado, ¡puedes completar el pedido!",
-    "select_payment_method": "¡Selecciona el método de pago!"
+    "select_payment_method": "¡Selecciona el método de pago!",
+    "payment_status": {
+      "pending": "Pendiente",
+      "paid": "Pagado"
+    }
   },
   "no_access": {
     "title": "¡Ups! ¡No tienes acceso a esta área! Vuelve a iniciar sesión para verificar nuevamente.",
     "go_back": "Regresar"
+  },
+  "not_found": {
+    "title": "Esta página no está en el menú",
+    "subtitle": "No encontramos lo que buscas. El enlace puede estar desactualizado o la dirección tener un error.",
+    "hint": "Puedes volver atrás o ir a un lugar seguro con los botones de abajo.",
+    "go_dashboard": "Ir al panel",
+    "go_login": "Iniciar sesión",
+    "go_back": "Volver atrás",
+    "img_alt": "Página no encontrada"
   },
   "kitchen": {
     "title": "Cocina",
@@ -916,7 +962,7 @@
     "change_language": "Cambiar idioma",
     "select_language": "Seleccionar idioma",
     "dark_mode": "Modo oscuro",
-    "light_mode": "Modo de luz"
+    "light_mode": "Modo claro"
   },
   "toast": {
     "please_wait": "Por favor espera...",
@@ -944,7 +990,8 @@
     "not_found_carrot": "Mientras tanto, aquí tienes una zanahoria 🥕 para hacerte compañía.",
     "variants": "Variantes",
     "addons": "Complementos",
-    "add": "AGREGAR"
+    "add": "AGREGAR",
+    "low_stock_badge": "Stock bajo - {{count}} uds."
   },
   "rating": {
     "worst": "Peor",
@@ -960,7 +1007,9 @@
     "inactive": "Inactivo",
     "renews_at": "Se renueva en",
     "cancel_subscription": "Cancelar suscripción",
+    "manage_subscription": "Administrar suscripción",
     "cancel_confirm": "¿Estás seguro? Esto cancelará inmediatamente tu suscripción y perderás el acceso al producto.",
+    "cancel_confirm_period_end": "¿Deseas cancelar este plan? Mantendrás el acceso hasta el {{date}}; después tu suscripción terminará y no se te volverá a cobrar.",
     "cancel_success": "¡Suscripción cancelada con éxito!",
     "cancel_error": "¡Ups! ¡Tuvimos problemas al procesar tu solicitud! ¡Inténtalo de nuevo más tarde! o contacta al soporte al cliente.",
     "canceled_access_until": "Tu suscripción ha sido cancelada. Seguirás teniendo acceso hasta {{date}}."
@@ -1124,6 +1173,14 @@
     "tax_type_placeholder": "Seleccionar tipo de impuesto",
     "exclusive": "Exclusivo",
     "inclusive": "Inclusivo",
+    "tax_types_guide_title": "Tipos de impuesto",
+    "tax_types_guide_intro": "Esta opción define cómo se calcula el impuesto sobre los precios del menú en POS, menú QR y carrito.",
+    "exclusive_card_badge": "Se suma al precio",
+    "exclusive_card_description": "El precio mostrado en el menú es sin impuesto. El impuesto se agrega al calcular el total del pedido.",
+    "exclusive_card_example": "Ejemplo: artículo de $100 + 16% de IVA → el cliente paga $116.",
+    "inclusive_card_badge": "Incluido en el precio",
+    "inclusive_card_description": "El precio mostrado en el menú ya incluye el impuesto. El sistema separa la base y el impuesto a partir de ese monto.",
+    "inclusive_card_example": "Ejemplo: $116 en menú con 16% de IVA → $100 netos + $16 de impuesto.",
     "actions": "Acciones",
     "save": "Guardar",
     "close": "Cerrar",
@@ -1205,7 +1262,20 @@
     "success_message": "¡Tipo de pago guardado con éxito!",
     "error_message": "¡Error al guardar el tipo de pago!",
     "delete_confirm": "¿Estás seguro? ¡Este proceso es irreversible!",
-    "update_payment_type": "Actualizar tipo de pago"
+    "update_payment_type": "Actualizar tipo de pago",
+    "icons": {
+      "cash": "Efectivo",
+      "card": "Tarjeta",
+      "wallet": "Billetera",
+      "paypal": "PayPal",
+      "qrcode": "Código QR",
+      "reader": "Lector de tarjetas",
+      "bank": "Transferencia bancaria",
+      "discount": "Descuento",
+      "uber": "Uber Eats",
+      "didi": "Didi Food",
+      "rappi": "Rappi Food"
+    }
   },
   "menu_item": {
     "please_wait": "Por favor espera...",
@@ -1246,7 +1316,31 @@
     "enter_variant_title": "Ingrese el título de la variante",
     "enter_variant_price": "Ingrese el precio de la variante",
     "enter_addon_title": "Ingrese el título del complemento",
-    "enter_addon_price": "Ingrese el precio del complemento"
+    "enter_addon_price": "Ingrese el precio del complemento",
+    "select_inventory_item": "Seleccionar artículo de inventario",
+    "recipe_items": "Ingredientes de la receta",
+    "add_recipe_item": "Agregar ingrediente",
+    "add_new_recipe_item": "Agregar ingrediente a la receta",
+    "edit_recipe_item": "Editar ingrediente de la receta",
+    "select_ingredient_error": "Selecciona un ingrediente.",
+    "valid_quantity_error": "Ingresa una cantidad válida.",
+    "select_variant_or_addon_error": "Selecciona una variante o un complemento.",
+    "updating": "Actualizando...",
+    "select_variant": "Seleccionar variante",
+    "select_addon": "Seleccionar complemento",
+    "recipe_note_label": "Nota:",
+    "recipe_extra_note_prefix": "Agrega solo los artículos de inventario adicionales que",
+    "recipe_extra_note_emphasis": "no estén incluidos",
+    "recipe_extra_note_suffix": "en la receta del artículo base.",
+    "type_to_search": "Escribe para buscar...",
+    "no_results_found": "No se encontraron resultados",
+    "qty_label": "Cant.",
+    "qty_in_unit": "(en {{unit}})",
+    "enter_qty": "Ingresa la cantidad",
+    "update": "Actualizar",
+    "tab_item": "Artículo",
+    "tab_variant": "Variante",
+    "tab_addon": "Complemento"
   },
   "superadmin_login": {
     "title": "SuperAdmin",
@@ -1434,7 +1528,7 @@
     "drafts_list": "Lista de borradores",
     "table_orders": "Pedidos de mesa",
     "search_customer": "Buscar cliente",
-    "walkin_customer": "CLIENTE SIN CITA",
+    "walkin_customer": "CLIENTE SIN REGISTRO",
     "select_dining_option": "Seleccionar opción de comedor",
     "dinein": "Comer en el lugar",
     "delivery": "Entrega",
@@ -1744,7 +1838,7 @@
     "edit_plan": "Editar plan",
     "update_your_subscription_plan": "Actualizar tu plan de suscripción",
     "add_feature_description": "Agregar descripción de función...",
-    "feature_points": "Puntos de funciones",
+    "feature_points": "Funciones",
     "please_activate_payment_gateway_first": "Por favor, activa primero una pasarela de pago",
     "placeholder_plan_title": "Ej.: Profesional, Empresa, Inicial",
     "add_feature_description_placeholder": "Agregar una descripción de la función...",

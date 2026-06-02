@@ -24,9 +24,11 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "../../contexts/ThemeContext";
 import { toast } from "react-hot-toast";
 import { clsx } from "clsx";
+import { useScopeLabel } from "../../helpers/scopeI18n";
 
 export default function SuperAdminPlanDetails() {
   const { t } = useTranslation();
+  const scopeLabel = useScopeLabel();
   const params = useParams();
   const planId = params.id;
   const { theme } = useTheme();
@@ -293,7 +295,7 @@ export default function SuperAdminPlanDetails() {
                         : "bg-restro-green/20 text-restro-green border border-restro-green/30"
                     )}
                   >
-                    {f}
+                    {scopeLabel(f)}
                   </span>
                 ))}
               </div>

@@ -6,7 +6,7 @@ import { useTheme } from '../contexts/ThemeContext';
 
 export default function LanguageChanger({className}) {
   const { i18n } = useTranslation();
-  const lang = getLanguage() || 'en';
+  const lang = getLanguage() || 'es';
   const {theme} = useTheme();
   const changeLanguage = (lang) => {
     i18n.changeLanguage(lang);

@@ -41,7 +41,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import clsx from "clsx";
 
 export default function OrdersPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const printReceiptRef = useRef();
   const user = getUserDetailsInLocalStorage();
@@ -618,7 +618,7 @@ export default function OrdersPage() {
                     </div>
                     <div>
                       <p className="font-bold">
-                        {table_id ? `${table_title}` : "Dine Out / Delivery"}
+                        {table_id ? `${table_title}` : t('orders.dine_out_or_delivery')}
                       </p>
                       {floor && <p className="text-sm">{floor}</p>}
                     </div>
@@ -722,7 +722,7 @@ export default function OrdersPage() {
                         </div>
                         <div className="text-end">
                           <p>
-                            {new Intl.DateTimeFormat("en-US", {
+                            {new Intl.DateTimeFormat(i18n.language, {
                               timeStyle: "short",
                             }).format(new Date(date))}
                           </p>
@@ -732,7 +732,9 @@ export default function OrdersPage() {
                           })}>
                             {" "}
                             <IconCash stroke={iconStroke} size={18} />{" "}
-                            {payment_status.toUpperCase()}
+                            {t(`orders.payment_status.${payment_status}`, {
+                              defaultValue: payment_status,
+                            })}
                           </p>
                         </div>
                       </div>
@@ -1083,7 +1085,7 @@ export default function OrdersPage() {
           <div className="flex items-center gap-2 text-sm">
             <div className="flex-1 border-b border-restro-gray"></div>
             <div className="w-12 h-12 flex items-center justify-center rounded-full bg-restro-gray">
-              OR
+              {t('orders.or')}
             </div>
             <div className="flex-1 border-b border-restro-gray"></div>
           </div>

@@ -102,7 +102,8 @@
     "SETTINGS": "Settings",
     "REPORTS": "Reports",
     "FEEDBACK": "Feedback",
-    "USER": "Users"
+    "USER": "Users",
+    "QRMENU": "QR Menu"
   },
   "reset_password": {
     "title": "Reset Password",
@@ -235,6 +236,36 @@
       "export_pdf": "PDF",
       "export_success": "{{format}} report exported",
       "export_error": "Could not export report. Please try again."
+    },
+    "chart_titles": {
+      "snapshot": "{{title}} Snapshot",
+      "sales_trend": "Sales Trend",
+      "sales_breakdown": "Sales Breakdown",
+      "hourly_sales_heatmap": "Hourly Sales Heatmap",
+      "revenue_by_order_type": "Revenue by Order Type",
+      "table_revenue_map": "Table Revenue Map",
+      "payment_mix": "Payment Mix",
+      "payment_volume": "Payment Volume",
+      "amount_progress": "{{title}} Amount Progress",
+      "transactions_by_date": "{{title}} Transactions by Date",
+      "menu_performance": "Menu Performance",
+      "revenue_contribution_map": "Revenue Contribution Map",
+      "quantity_movement": "Quantity Movement",
+      "inventory_quantity_view": "Inventory Quantity View",
+      "stock_pressure_map": "Stock Pressure Map",
+      "movement_heatmap": "Movement Heatmap",
+      "customer_activity": "Customer Activity",
+      "customer_order_volume": "Customer Order Volume",
+      "operational_volume": "Operational Volume",
+      "status_payment_heatmap": "Status and Payment Heatmap",
+      "table_activity_map": "Table Activity Map",
+      "accounting_trend": "Accounting Trend",
+      "accounting_breakdown": "Accounting Breakdown",
+      "reservation_volume": "Reservation Volume",
+      "reservation_heatmap": "Reservation Heatmap",
+      "feedback_scores": "Feedback Scores",
+      "rating_dimension_radar": "Rating Dimension Radar",
+      "recommendation_mix": "Recommendation Mix"
     },
     "categories": {
       "sales": "Sales",
@@ -489,6 +520,8 @@
   "print_receipt": {
     "phone": "Phone",
     "email": "Email",
+    "customer_walkin": "Walk-in",
+    "customer_registered": "Customer",
     "order_type": "Order Type",
     "payment_method": "Payment Method",
     "receipt_no": "Receipt No.",
@@ -565,11 +598,24 @@
     "feedback_qr_img_alt": "feedback qr",
     "payment_not_collected_error": "Action cannot be processed because payment has not been collected. Please use the 'Pay & Complete' option instead.",
     "payment_already_collected_error": "Payment Already collected, you can complete the order!",
-    "select_payment_method": "Select Payment Method!"
+    "select_payment_method": "Select Payment Method!",
+    "payment_status": {
+      "pending": "Pending",
+      "paid": "Paid"
+    }
   },
   "no_access": {
     "title": "Oops! You don't have access to this area! Relogin to check again.",
     "go_back": "Go back"
+  },
+  "not_found": {
+    "title": "This page took a wrong turn",
+    "subtitle": "We couldn't find what you're looking for. The link may be outdated or the address might have a typo.",
+    "hint": "Try going back, or head to a safe place below.",
+    "go_dashboard": "Go to dashboard",
+    "go_login": "Sign in",
+    "go_back": "Go back",
+    "img_alt": "Page not found"
   },
   "kitchen": {
     "title": "Kitchen",
@@ -944,7 +990,8 @@
     "not_found_carrot": "In the meantime, here's a carrot 🥕 to keep you company!",
     "variants": "Variants",
     "addons": "Addons",
-    "add": "ADD"
+    "add": "ADD",
+    "low_stock_badge": "Low Stock - {{count}} Qty"
   },
   "rating": {
     "worst": "Worst",
@@ -960,9 +1007,12 @@
     "inactive": "In-Active",
     "renews_at": "Renews at",
     "cancel_subscription": "Cancel Subscription",
+    "manage_subscription": "Manage Subscription",
     "cancel_confirm": "Are you sure? This will immediately cancel your subscription, and you will lose out access to the product.",
+    "cancel_confirm_period_end": "Do you want to cancel this plan? You'll retain access until {{date}}, after which your subscription will end and you won't be charged further.",
     "cancel_success": "Subscription cancelled successfully!",
-    "cancel_error": "Oops! We got issues while processing your request! Please try after sometime! Or contact customer support!"
+    "cancel_error": "Oops! We got issues while processing your request! Please try after sometime! Or contact customer support!",
+    "canceled_access_until": "Your subscription has been canceled. You will retain access until {{date}}."
   },
   "settings": {
     "details": "Details",
@@ -1123,6 +1173,14 @@
     "tax_type_placeholder": "Select Tax Type",
     "exclusive": "Exclusive",
     "inclusive": "Inclusive",
+    "tax_types_guide_title": "Understanding tax types",
+    "tax_types_guide_intro": "This setting controls how tax is calculated on menu prices in POS, QR menu, and cart checkout.",
+    "exclusive_card_badge": "Added on top",
+    "exclusive_card_description": "The price shown on the menu is before tax. Tax is added when the order is totaled.",
+    "exclusive_card_example": "Example: $100 item + 16% tax → customer pays $116.",
+    "inclusive_card_badge": "Included in price",
+    "inclusive_card_description": "The price shown on the menu already includes tax. The system extracts the tax portion from that amount.",
+    "inclusive_card_example": "Example: $116 on the menu with 16% tax → $100 net + $16 tax.",
     "actions": "Actions",
     "save": "Save",
     "close": "Close",
@@ -1204,7 +1262,20 @@
     "success_message": "Payment type saved successfully!",
     "error_message": "Error saving payment type!",
     "delete_confirm": "Are you sure! This process is irreversible!",
-    "update_payment_type": "Update Payment Type"
+    "update_payment_type": "Update Payment Type",
+    "icons": {
+      "cash": "Cash",
+      "card": "Card",
+      "wallet": "Wallet",
+      "paypal": "PayPal",
+      "qrcode": "QR Code",
+      "reader": "Card reader",
+      "bank": "Bank transfer",
+      "discount": "Discount",
+      "uber": "Uber",
+      "didi": "Didi Food",
+      "rappi": "Rappi Food"
+    }
   },
   "menu_item": {
     "please_wait": "Please wait...",
@@ -1245,7 +1316,31 @@
     "enter_variant_title": "Enter Variant Title",
     "enter_variant_price": "Enter Variant Price",
     "enter_addon_title": "Enter Addon Title",
-    "enter_addon_price": "Enter Addon Price"
+    "enter_addon_price": "Enter Addon Price",
+    "select_inventory_item": "Select Inventory Item",
+    "recipe_items": "Recipe Items",
+    "add_recipe_item": "Add Item",
+    "add_new_recipe_item": "Add New Recipe Item",
+    "edit_recipe_item": "Edit Recipe Item",
+    "select_ingredient_error": "Please select an ingredient.",
+    "valid_quantity_error": "Please enter a valid quantity.",
+    "select_variant_or_addon_error": "Please select a variant or addon.",
+    "updating": "Updating...",
+    "select_variant": "Select Variant",
+    "select_addon": "Select Addon",
+    "recipe_note_label": "Note:",
+    "recipe_extra_note_prefix": "Add only those extra inventory items that are",
+    "recipe_extra_note_emphasis": "not included",
+    "recipe_extra_note_suffix": "in the base item recipe.",
+    "type_to_search": "Type to search...",
+    "no_results_found": "No results found",
+    "qty_label": "Qty.",
+    "qty_in_unit": "(in {{unit}})",
+    "enter_qty": "Enter Qty.",
+    "update": "Update",
+    "tab_item": "Item",
+    "tab_variant": "Variant",
+    "tab_addon": "Addon"
   },
   "superadmin_login": {
     "title": "SuperAdmin",

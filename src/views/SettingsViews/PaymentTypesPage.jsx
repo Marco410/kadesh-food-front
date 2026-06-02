@@ -12,6 +12,10 @@ import { Listbox, Transition } from '@headlessui/react'
 
 export default function PaymentTypesPage() {
   const { t } = useTranslation();
+  const paymentIconLabel = (iconKey) =>
+    iconKey
+      ? t(`payment_types.icons.${iconKey}`, { defaultValue: iconKey })
+      : t("payment_types.select_icon");
   const paymentTypeAddRef = useRef();
 
   const paymentTypeIdUpdateRef = useRef();
@@ -237,9 +241,7 @@ export default function PaymentTypesPage() {
 
                   <span className="truncate flex items-center gap-2">
                     {PAYMENT_ICONS[selectedIcon]}{" "}
-                    {selectedIcon
-                      ? new String(selectedIcon).toUpperCase()
-                      : t('payment_types.select_icon')}
+                    {paymentIconLabel(selectedIcon)}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <IconChevronDown
@@ -367,9 +369,7 @@ export default function PaymentTypesPage() {
                 <Listbox.Button className='relative w-full cursor-default text-left sm:text-sm border border-restro-border-green dark:bg-black rounded-lg px-4 py-2 focus:border-restro-border-green focus:outline-none'>
                   <span className="truncate flex items-center gap-2">
                     {PAYMENT_ICONS[selectedIcon]}{" "}
-                    {selectedIcon
-                      ? new String(selectedIcon).toUpperCase()
-                      : t('payment_types.select_icon')}
+                    {paymentIconLabel(selectedIcon)}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <IconChevronDown

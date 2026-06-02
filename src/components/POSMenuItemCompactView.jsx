@@ -80,7 +80,7 @@ const POSMenuItemCompactView = ({ menuItems, selectedCategory, categories, searc
                     <div className="absolute left-0 bottom-0 bg-amber-50 text-amber-600 text-[10px] font-medium px-1 py-[1px] z-10 w-full flex flex-col items-center gap-[2px] ">
                       <div className="flex items-center gap-1">
                         <IconAlertTriangleFilled size={12} />
-                        <span>Low Stock - {minItemsCanBeMade} Qty</span>
+                        <span>{t('pos_menu.low_stock_badge', { count: minItemsCanBeMade })}</span>
                       </div>
                     </div>
                   )}
@@ -89,7 +89,17 @@ const POSMenuItemCompactView = ({ menuItems, selectedCategory, categories, searc
               <div className="px-2 pb-2 flex flex-col w-full flex-grow">
                 <div className='text-left flex-grow'>
                   <p className='line-clamp-1 text-ellipsis text-sm font-semibold '>{title}</p>
-                  {/* <p className="text-[10px] text-gray-500">{variants?.length > 0 && <span>{variants?.length} {t("pos_menu.variants")}</span>} {addons?.length > 0 && <span>{addons?.length} {t("pos_menu.addons")}</span>}</p> */}
+                  {(variants?.length > 0 || addons?.length > 0) && (
+                    <p className="text-[10px] text-gray-500">
+                      {variants?.length > 0 && (
+                        <span>{variants.length} {t('pos_menu.variants')}</span>
+                      )}
+                      {variants?.length > 0 && addons?.length > 0 && ' · '}
+                      {addons?.length > 0 && (
+                        <span>{addons.length} {t('pos_menu.addons')}</span>
+                      )}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <p className='text-left text-restro-green font-bold text-sm mt-1'>{currency}{price}</p>

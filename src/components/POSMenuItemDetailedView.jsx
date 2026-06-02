@@ -72,7 +72,7 @@ const POSMenuItemDetailedView = ({ menuItems, selectedCategory, categories, sear
                       <div className="absolute left-0 bottom-0 bg-amber-50 text-amber-600 text-[10px] font-medium px-1 py-[1px] z-10 w-full flex flex-col items-center gap-[2px] rounded-bl-2xl">
                         <div className="flex items-center gap-1">
                           <IconAlertTriangleFilled size={12} />
-                          <span>Low Stock - {minItemsCanBeMade} Qty</span>
+                          <span>{t('pos_menu.low_stock_badge', { count: minItemsCanBeMade })}</span>
                         </div>
                       </div>
                     )}

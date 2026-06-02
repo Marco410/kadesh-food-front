@@ -16,11 +16,11 @@ import { addNewUser, deleteUser, resetUserPassword, updateUser, useUsers } from 
 import { validateEmail } from "../utils/emailValidator";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../contexts/ThemeContext";
+import { useScopeLabel } from "../helpers/scopeI18n";
 
 export default function UsersPage() {
   const { t } = useTranslation();
-  const scopeLabel = (scopeKey) =>
-    t(`scope_labels.${scopeKey}`, { defaultValue: scopeKey });
+  const scopeLabel = useScopeLabel();
   const [state, setState] = useState({
     selectedScopes: [],
   });

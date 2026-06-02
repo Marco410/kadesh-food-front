@@ -8,6 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      workbox: {
+        navigateFallback: "/index.html",
+        navigateFallbackDenylist: [/^\/api\//],
+      },
       manifest: {
         name: "Kadesh Food",
         short_name: "Kadesh Food",

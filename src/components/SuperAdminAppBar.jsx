@@ -147,7 +147,7 @@ export default function SuperAdminAppBar() {
                     } group flex gap-2 w-full items-center rounded-2xl px-3 py-2 text-sm`}
                   >
                     <IconLogout stroke={iconStroke} />
-                    Logout
+                    {t("appbar.logout")}
                   </button>
                 )}
               </Menu.Item>
