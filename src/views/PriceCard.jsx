@@ -163,7 +163,7 @@ const PricingCard = ({
               {originalPrice}
             </span>
             <span className="rounded bg-restro-green-10 px-2 py-0.5 text-xs font-medium text-restro-green">
-              Save {effectiveYearlyDiscount}%
+              {t("inactive_subscription.save")} {effectiveYearlyDiscount}%
             </span>
           </div>
         )}
