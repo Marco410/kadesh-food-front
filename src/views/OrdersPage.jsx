@@ -1085,7 +1085,7 @@ export default function OrdersPage() {
           <div className="flex items-center gap-2 text-sm">
             <div className="flex-1 border-b border-restro-gray"></div>
             <div className="w-12 h-12 flex items-center justify-center rounded-full bg-restro-gray">
-              OR
+              {t('orders.or')}
             </div>
             <div className="flex-1 border-b border-restro-gray"></div>
           </div>

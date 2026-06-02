@@ -1,6 +1,12 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
+import { useTranslation } from "react-i18next";
 import { formatReportValue } from "../../utils/reportExports.jsx";
+
+function useReportChartTitle() {
+  const { t } = useTranslation();
+  return (key, options) => t(`reports.chart_titles.${key}`, options);
+}
 
 const getRows = (data, tableIndex = 0) => data?.tables?.[tableIndex]?.rows || [];
 const getColumns = (data, tableIndex = 0) => data?.tables?.[tableIndex]?.columns || [];
@@ -305,6 +311,7 @@ function ChartGrid({ children }) {
 }
 
 function GenericReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -313,7 +320,7 @@ function GenericReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       {rows.length > 0 && (
-        <BarChart rows={rows} columns={columns} title={`${data.title} Snapshot`} currency={currency} />
+        <BarChart rows={rows} columns={columns} title={chartTitle("snapshot", { title: data.title })} currency={currency} />
       )}
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -323,6 +330,7 @@ function GenericReportPage({ data, currency, components }) {
 }
 
 function SalesReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -336,11 +344,11 @@ function SalesReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <LineChart rows={rows} columns={columns} title="Sales Trend" categoryKey={categoryKey} valueKeys={valueKeys} currency={currency} chartType="area" />
-        <BarChart rows={rows} columns={columns} title="Sales Breakdown" categoryKey={categoryKey} valueKey={pickColumn(columns, ["revenue", "gross_sales", "total", "net_sales"])} currency={currency} />
-        {hasHour && <HeatmapChart rows={rows} columns={columns} title="Hourly Sales Heatmap" xKey="hour" yKey="hour" valueKey="revenue" currency={currency} />}
-        {hasOrderType && <PieChart rows={rows} columns={columns} title="Revenue by Order Type" labelKey="order_type" valueKey="revenue" currency={currency} />}
-        {hasTable && <TreemapChart rows={rows} columns={columns} title="Table Revenue Map" labelKey="table_title" valueKey="revenue" currency={currency} />}
+        <LineChart rows={rows} columns={columns} title={chartTitle("sales_trend")} categoryKey={categoryKey} valueKeys={valueKeys} currency={currency} chartType="area" />
+        <BarChart rows={rows} columns={columns} title={chartTitle("sales_breakdown")} categoryKey={categoryKey} valueKey={pickColumn(columns, ["revenue", "gross_sales", "total", "net_sales"])} currency={currency} />
+        {hasHour && <HeatmapChart rows={rows} columns={columns} title={chartTitle("hourly_sales_heatmap")} xKey="hour" yKey="hour" valueKey="revenue" currency={currency} />}
+        {hasOrderType && <PieChart rows={rows} columns={columns} title={chartTitle("revenue_by_order_type")} labelKey="order_type" valueKey="revenue" currency={currency} />}
+        {hasTable && <TreemapChart rows={rows} columns={columns} title={chartTitle("table_revenue_map")} labelKey="table_title" valueKey="revenue" currency={currency} />}
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -350,6 +358,7 @@ function SalesReportPage({ data, currency, components }) {
 }
 
 function PaymentReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -360,8 +369,8 @@ function PaymentReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        {columns.some((column) => column.key === "payment_type") && <PieChart rows={rows} columns={columns} title="Payment Mix" labelKey="payment_type" valueKey={valueKey} currency={currency} />}
-        <BarChart rows={rows} columns={columns} title="Payment Volume" categoryKey={labelKey} valueKey={valueKey} currency={currency} />
+        {columns.some((column) => column.key === "payment_type") && <PieChart rows={rows} columns={columns} title={chartTitle("payment_mix")} labelKey="payment_type" valueKey={valueKey} currency={currency} />}
+        <BarChart rows={rows} columns={columns} title={chartTitle("payment_volume")} categoryKey={labelKey} valueKey={valueKey} currency={currency} />
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -371,6 +380,7 @@ function PaymentReportPage({ data, currency, components }) {
 }
 
 function PaymentMethodProgressPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const groupedRows = groupRowsByDate(rows);
@@ -384,8 +394,8 @@ function PaymentMethodProgressPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <LineChart rows={groupedRows} columns={groupedColumns} title={`${data.title} Amount Progress`} categoryKey="date" valueKeys={["total"]} currency={currency} chartType="area" />
-        <BarChart rows={groupedRows} columns={groupedColumns} title={`${data.title} Transactions by Date`} categoryKey="date" valueKey="invoices" currency={currency} />
+        <LineChart rows={groupedRows} columns={groupedColumns} title={chartTitle("amount_progress", { title: data.title })} categoryKey="date" valueKeys={["total"]} currency={currency} chartType="area" />
+        <BarChart rows={groupedRows} columns={groupedColumns} title={chartTitle("transactions_by_date", { title: data.title })} categoryKey="date" valueKey="invoices" currency={currency} />
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -395,6 +405,7 @@ function PaymentMethodProgressPage({ data, currency, components }) {
 }
 
 function MenuReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -405,9 +416,9 @@ function MenuReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <BarChart rows={rows} columns={columns} title="Menu Performance" categoryKey={labelKey} valueKey={primaryValueKey} currency={currency} />
-        <TreemapChart rows={rows} columns={columns} title="Revenue Contribution Map" labelKey={labelKey} valueKey={primaryValueKey} currency={currency} />
-        <BarChart rows={rows} columns={columns} title="Quantity Movement" categoryKey={labelKey} valueKey={pickColumn(columns, ["quantity_sold", "order_lines"])} currency={currency} />
+        <BarChart rows={rows} columns={columns} title={chartTitle("menu_performance")} categoryKey={labelKey} valueKey={primaryValueKey} currency={currency} />
+        <TreemapChart rows={rows} columns={columns} title={chartTitle("revenue_contribution_map")} labelKey={labelKey} valueKey={primaryValueKey} currency={currency} />
+        <BarChart rows={rows} columns={columns} title={chartTitle("quantity_movement")} categoryKey={labelKey} valueKey={pickColumn(columns, ["quantity_sold", "order_lines"])} currency={currency} />
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -417,6 +428,7 @@ function MenuReportPage({ data, currency, components }) {
 }
 
 function InventoryReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -425,9 +437,9 @@ function InventoryReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <BarChart rows={rows} columns={columns} title="Inventory Quantity View" categoryKey={pickColumn(columns, ["title", "item", "inventory_item"])} valueKey={pickColumn(columns, ["reorder_quantity", "quantity", "quantity_change", "wasted_quantity", "estimated_usage"])} currency={currency} />
-        <TreemapChart rows={rows} columns={columns} title="Stock Pressure Map" labelKey={pickColumn(columns, ["title", "item", "inventory_item"])} valueKey={pickColumn(columns, ["reorder_quantity", "wasted_quantity", "estimated_usage", "quantity"])} currency={currency} />
-        {columns.some((column) => column.key === "movement_type") && <HeatmapChart rows={rows} columns={columns} title="Movement Heatmap" xKey="created_at" yKey="movement_type" valueKey="quantity_change" currency={currency} />}
+        <BarChart rows={rows} columns={columns} title={chartTitle("inventory_quantity_view")} categoryKey={pickColumn(columns, ["title", "item", "inventory_item"])} valueKey={pickColumn(columns, ["reorder_quantity", "quantity", "quantity_change", "wasted_quantity", "estimated_usage"])} currency={currency} />
+        <TreemapChart rows={rows} columns={columns} title={chartTitle("stock_pressure_map")} labelKey={pickColumn(columns, ["title", "item", "inventory_item"])} valueKey={pickColumn(columns, ["reorder_quantity", "wasted_quantity", "estimated_usage", "quantity"])} currency={currency} />
+        {columns.some((column) => column.key === "movement_type") && <HeatmapChart rows={rows} columns={columns} title={chartTitle("movement_heatmap")} xKey="created_at" yKey="movement_type" valueKey="quantity_change" currency={currency} />}
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -437,6 +449,7 @@ function InventoryReportPage({ data, currency, components }) {
 }
 
 function CustomerReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -447,8 +460,8 @@ function CustomerReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <BarChart rows={rows} columns={columns} title="Customer Activity" categoryKey={labelKey} valueKey={activityValueKey} currency={currency} />
-        <BarChart rows={rows} columns={columns} title="Customer Order Volume" categoryKey={labelKey} valueKey={pickColumn(columns, ["orders"])} currency={currency} />
+        <BarChart rows={rows} columns={columns} title={chartTitle("customer_activity")} categoryKey={labelKey} valueKey={activityValueKey} currency={currency} />
+        <BarChart rows={rows} columns={columns} title={chartTitle("customer_order_volume")} categoryKey={labelKey} valueKey={pickColumn(columns, ["orders"])} currency={currency} />
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -458,6 +471,7 @@ function CustomerReportPage({ data, currency, components }) {
 }
 
 function OperationsReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -467,9 +481,9 @@ function OperationsReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <BarChart rows={rows} columns={columns} title="Operational Volume" categoryKey={pickColumn(columns, ["status", "table_title", "staff_name", "date", "token_no", "order_type"])} valueKey={pickColumn(columns, ["orders", "quantity", "item_lines", "revenue", "estimated_total"])} currency={currency} />
-        {hasStatusAndPayment && <HeatmapChart rows={rows} columns={columns} title="Status and Payment Heatmap" xKey="status" yKey="payment_status" valueKey="orders" currency={currency} />}
-        {columns.some((column) => column.key === "table_title") && <TreemapChart rows={rows} columns={columns} title="Table Activity Map" labelKey="table_title" valueKey={pickColumn(columns, ["orders", "revenue", "estimated_total"])} currency={currency} />}
+        <BarChart rows={rows} columns={columns} title={chartTitle("operational_volume")} categoryKey={pickColumn(columns, ["status", "table_title", "staff_name", "date", "token_no", "order_type"])} valueKey={pickColumn(columns, ["orders", "quantity", "item_lines", "revenue", "estimated_total"])} currency={currency} />
+        {hasStatusAndPayment && <HeatmapChart rows={rows} columns={columns} title={chartTitle("status_payment_heatmap")} xKey="status" yKey="payment_status" valueKey="orders" currency={currency} />}
+        {columns.some((column) => column.key === "table_title") && <TreemapChart rows={rows} columns={columns} title={chartTitle("table_activity_map")} labelKey="table_title" valueKey={pickColumn(columns, ["orders", "revenue", "estimated_total"])} currency={currency} />}
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -479,6 +493,7 @@ function OperationsReportPage({ data, currency, components }) {
 }
 
 function AccountingReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -487,8 +502,8 @@ function AccountingReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <LineChart rows={rows} columns={columns} title="Accounting Trend" categoryKey={pickColumn(columns, ["date", "created_at"])} valueKeys={["revenue", "tax_total", "service_charge_total", "total"].filter((key) => columns.some((column) => column.key === key))} currency={currency} chartType="area" />
-        <BarChart rows={rows} columns={columns} title="Accounting Breakdown" categoryKey={pickColumn(columns, ["date", "tax", "item", "invoice_id"])} valueKey={pickColumn(columns, ["tax_total", "estimated_tax", "service_charge_total", "total", "revenue"])} currency={currency} />
+        <LineChart rows={rows} columns={columns} title={chartTitle("accounting_trend")} categoryKey={pickColumn(columns, ["date", "created_at"])} valueKeys={["revenue", "tax_total", "service_charge_total", "total"].filter((key) => columns.some((column) => column.key === key))} currency={currency} chartType="area" />
+        <BarChart rows={rows} columns={columns} title={chartTitle("accounting_breakdown")} categoryKey={pickColumn(columns, ["date", "tax", "item", "invoice_id"])} valueKey={pickColumn(columns, ["tax_total", "estimated_tax", "service_charge_total", "total", "revenue"])} currency={currency} />
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -498,6 +513,7 @@ function AccountingReportPage({ data, currency, components }) {
 }
 
 function ReservationReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -506,8 +522,8 @@ function ReservationReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <BarChart rows={rows} columns={columns} title="Reservation Volume" categoryKey={pickColumn(columns, ["status", "date", "table_title"])} valueKey={pickColumn(columns, ["reservations", "people_count", "guests"])} currency={currency} />
-        {columns.some((column) => column.key === "table_title") && <HeatmapChart rows={rows} columns={columns} title="Reservation Heatmap" xKey={pickColumn(columns, ["status", "date"])} yKey="table_title" valueKey={pickColumn(columns, ["reservations", "people_count"])} currency={currency} />}
+        <BarChart rows={rows} columns={columns} title={chartTitle("reservation_volume")} categoryKey={pickColumn(columns, ["status", "date", "table_title"])} valueKey={pickColumn(columns, ["reservations", "people_count", "guests"])} currency={currency} />
+        {columns.some((column) => column.key === "table_title") && <HeatmapChart rows={rows} columns={columns} title={chartTitle("reservation_heatmap")} xKey={pickColumn(columns, ["status", "date"])} yKey="table_title" valueKey={pickColumn(columns, ["reservations", "people_count"])} currency={currency} />}
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
@@ -517,6 +533,7 @@ function ReservationReportPage({ data, currency, components }) {
 }
 
 function FeedbackReportPage({ data, currency, components }) {
+  const chartTitle = useReportChartTitle();
   const { SummaryGrid, DataTable } = components;
   const rows = getRows(data);
   const columns = getColumns(data);
@@ -531,9 +548,9 @@ function FeedbackReportPage({ data, currency, components }) {
     <div className="mt-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SummaryGrid summary={data.summary} currency={currency} />
       <ChartGrid>
-        <LineChart rows={rows} columns={columns} title="Feedback Scores" categoryKey={pickColumn(columns, ["date", "recommendation_group"])} valueKeys={["average_rating", "service_rating", "recommend_rating", "feedback_count"].filter((key) => columns.some((column) => column.key === key))} currency={currency} />
-        {ratingMetrics.length > 0 && <RadarChart title="Rating Dimension Radar" metrics={ratingMetrics} />}
-        {columns.some((column) => column.key === "recommendation_group") && <PieChart rows={rows} columns={columns} title="Recommendation Mix" labelKey="recommendation_group" valueKey="feedback_count" currency={currency} />}
+        <LineChart rows={rows} columns={columns} title={chartTitle("feedback_scores")} categoryKey={pickColumn(columns, ["date", "recommendation_group"])} valueKeys={["average_rating", "service_rating", "recommend_rating", "feedback_count"].filter((key) => columns.some((column) => column.key === key))} currency={currency} />
+        {ratingMetrics.length > 0 && <RadarChart title={chartTitle("rating_dimension_radar")} metrics={ratingMetrics} />}
+        {columns.some((column) => column.key === "recommendation_group") && <PieChart rows={rows} columns={columns} title={chartTitle("recommendation_mix")} labelKey="recommendation_group" valueKey="feedback_count" currency={currency} />}
       </ChartGrid>
       {(data.tables || []).map((table) => (
         <DataTable key={table.title} table={table} currency={currency} />
