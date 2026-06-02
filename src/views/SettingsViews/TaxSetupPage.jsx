@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Page from "../../components/Page";
-import { IconDeviceFloppy, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconDeviceFloppy, IconInfoCircle, IconPencil, IconPlus, IconReceiptTax, IconTrash } from "@tabler/icons-react";
 import { iconStroke } from "../../config/config";
 import { addNewTax, deleteTax, updateTax, useTaxes, updateServiceCharge, useStoreSettings, getServiceCharge } from "../../controllers/settings.controller";
 import toast from "react-hot-toast";
@@ -23,6 +23,12 @@ export default function TaxSetupPage() {
   const {theme} = useTheme();
 
   const { APIURL, data: taxes, error, isLoading } = useTaxes();
+
+  const getTaxTypeLabel = (type) => {
+    if (type === "exclusive") return t("tax_setup.exclusive");
+    if (type === "inclusive") return t("tax_setup.inclusive");
+    return type;
+  };
 
   const fetchServiceCharge = async () => {
     try {
@@ -256,7 +262,19 @@ export default function TaxSetupPage() {
                   <td className="px-3 py-2 text-start">{index+1}</td>
                   <td className="px-3 py-2 text-start">{title}</td>
                   <td className="px-3 py-2 text-start">{rate}%</td>
-                  <td className="px-3 py-2 text-start">{type}</td>
+                  <td className="px-3 py-2 text-start">
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                        type === "exclusive"
+                          ? "bg-amber-50 text-amber-700"
+                          : type === "inclusive"
+                            ? "bg-restro-green-10 text-restro-green"
+                            : "bg-restro-bg-gray text-restro-text"
+                      }`}
+                    >
+                      {getTaxTypeLabel(type)}
+                    </span>
+                  </td>
                   <td className="px-3 py-2 text-start flex flex-wrap gap-2 items-center">
                     <button
                       onClick={() => {
@@ -281,6 +299,65 @@ export default function TaxSetupPage() {
           </tbody>
         </table>
       </div>
+
+      <section
+        className="mt-8 rounded-2xl border border-restro-border-green bg-restro-bg-gray/40 p-5 md:p-6"
+        aria-labelledby="tax-types-guide-title"
+      >
+        <div className="flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-restro-green-10 text-restro-green">
+            <IconInfoCircle size={22} stroke={iconStroke} />
+          </span>
+          <div>
+            <h4 id="tax-types-guide-title" className="text-lg font-semibold text-foreground">
+              {t("tax_setup.tax_types_guide_title")}
+            </h4>
+            <p className="mt-1 text-sm text-restro-text">{t("tax_setup.tax_types_guide_intro")}</p>
+          </div>
+        </div>
+
+        <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <article className="rounded-xl border border-restro-border-green bg-background p-5 shadow-sm transition hover:border-amber-200/80">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+                  <IconReceiptTax size={20} stroke={iconStroke} />
+                </span>
+                <h5 className="font-semibold text-foreground">{t("tax_setup.exclusive")}</h5>
+              </div>
+              <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-amber-700">
+                {t("tax_setup.exclusive_card_badge")}
+              </span>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-restro-text">
+              {t("tax_setup.exclusive_card_description")}
+            </p>
+            <p className="mt-3 rounded-lg border border-dashed border-amber-200/80 bg-amber-50/50 px-3 py-2 text-xs text-amber-900">
+              {t("tax_setup.exclusive_card_example")}
+            </p>
+          </article>
+
+          <article className="rounded-xl border border-restro-border-green bg-background p-5 shadow-sm transition hover:border-restro-green/40">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-restro-green-10 text-restro-green">
+                  <IconReceiptTax size={20} stroke={iconStroke} />
+                </span>
+                <h5 className="font-semibold text-foreground">{t("tax_setup.inclusive")}</h5>
+              </div>
+              <span className="rounded-full bg-restro-green-10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-restro-green">
+                {t("tax_setup.inclusive_card_badge")}
+              </span>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-restro-text">
+              {t("tax_setup.inclusive_card_description")}
+            </p>
+            <p className="mt-3 rounded-lg border border-dashed border-restro-border-green bg-restro-green-10/50 px-3 py-2 text-xs text-restro-green-dark">
+              {t("tax_setup.inclusive_card_example")}
+            </p>
+          </article>
+        </div>
+      </section>
 
       <dialog id="modal-add" className={`modal modal-bottom sm:modal-middle `}>
         <div className='modal-box border border-restro-border-green dark:rounded-2xl'>
