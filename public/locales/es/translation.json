@@ -997,6 +997,7 @@
     "renews_at": "Se renueva en",
     "cancel_subscription": "Cancelar suscripción",
     "cancel_confirm": "¿Estás seguro? Esto cancelará inmediatamente tu suscripción y perderás el acceso al producto.",
+    "cancel_confirm_period_end": "¿Deseas cancelar este plan? Mantendrás el acceso hasta el {{date}}; después tu suscripción terminará y no se te volverá a cobrar.",
     "cancel_success": "¡Suscripción cancelada con éxito!",
     "cancel_error": "¡Ups! ¡Tuvimos problemas al procesar tu solicitud! ¡Inténtalo de nuevo más tarde! o contacta al soporte al cliente.",
     "canceled_access_until": "Tu suscripción ha sido cancelada. Seguirás teniendo acceso hasta {{date}}."

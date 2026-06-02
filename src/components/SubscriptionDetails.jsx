@@ -27,15 +27,12 @@ export default function SubscriptionDetails() {
     const subscriptionId = data?.subscription_id;
     const paymentGateway = data?.payment_gateway;
 
+    const subscriptionEndDate = String(data?.subscription_end).substring(0, 10);
+
     const isConfirm = data?.isTrialPlan
       ? window.confirm(t("subscription.cancel_confirm"))
       : window.confirm(
-          `Do you want to cancel this plan? You’ll retain access until ${String(
-            data?.subscription_end
-          ).substring(
-            0,
-            10
-          )}, after which your subscription will end and you won't be charged further.`
+          t("subscription.cancel_confirm_period_end", { date: subscriptionEndDate })
         );
 
     if (!isConfirm) {

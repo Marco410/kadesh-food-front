@@ -997,8 +997,10 @@
     "renews_at": "Renews at",
     "cancel_subscription": "Cancel Subscription",
     "cancel_confirm": "Are you sure? This will immediately cancel your subscription, and you will lose out access to the product.",
+    "cancel_confirm_period_end": "Do you want to cancel this plan? You'll retain access until {{date}}, after which your subscription will end and you won't be charged further.",
     "cancel_success": "Subscription cancelled successfully!",
-    "cancel_error": "Oops! We got issues while processing your request! Please try after sometime! Or contact customer support!"
+    "cancel_error": "Oops! We got issues while processing your request! Please try after sometime! Or contact customer support!",
+    "canceled_access_until": "Your subscription has been canceled. You will retain access until {{date}}."
   },
   "settings": {
     "details": "Details",
