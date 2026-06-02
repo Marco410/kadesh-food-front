@@ -42,7 +42,7 @@ export default function CustomerCard({phone, name, email, birth_date=null, gende
       )}
       {gender && (
         <p className="text-sm flex items-center gap-1 text-gray-500">
-          {t('customers.gender')}: {gender}
+          {t('customers.gender')}: {t(`customers.${String(gender).toLowerCase()}`, { defaultValue: gender })}
         </p>
       )}
 

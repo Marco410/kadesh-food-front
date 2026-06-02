@@ -10,4 +10,7 @@ export const PAYMENT_ICONS = {
     'reader': <IconDeviceIpad stroke={iconStroke} />,
     'bank': <IconBuildingBank stroke={iconStroke} />,
     'discount': <IconDiscount stroke={iconStroke} />,
+    'uber': <IconBrandUber stroke={iconStroke} />,
+    'didi': <IconLetterD stroke={iconStroke} />,
+    'rappi': <IconMoustache stroke={iconStroke} />,
 }

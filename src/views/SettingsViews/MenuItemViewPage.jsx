@@ -1195,7 +1195,7 @@ export default function MenuItemViewPage() {
               htmlFor="inventorySelect"
               className="mb-1 block text-gray-500 text-sm"
             >
-              Select Inventory Item
+              {t("menu_item.select_inventory_item")}
             </label>
             <AsyncSelect
               key={`inventory-${activeAddRecipeItemTab}`}
@@ -1415,7 +1415,7 @@ export default function MenuItemViewPage() {
 
           {/* Ingredient Selector */}
           <div className="mb-4">
-            <label className="mb-1 block text-gray-500 text-sm">Select Inventory Item</label>
+            <label className="mb-1 block text-gray-500 text-sm">{t("menu_item.select_inventory_item")}</label>
             <AsyncSelect
               defaultOptions={getIngredientsOptions()}
               loadOptions={(inputValue, callback) =>

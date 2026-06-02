@@ -566,7 +566,11 @@
     "feedback_qr_img_alt": "Comentarios QR",
     "payment_not_collected_error": "La acción no se puede procesar porque el pago no se ha recopilado. ",
     "payment_already_collected_error": "PagoYa cobrado, ¡puedes completar el pedido!",
-    "select_payment_method": "¡Selecciona el método de pago!"
+    "select_payment_method": "¡Selecciona el método de pago!",
+    "payment_status": {
+      "pending": "Pendiente",
+      "paid": "Pagado"
+    }
   },
   "no_access": {
     "title": "¡Ups! ¡No tienes acceso a esta área! Vuelve a iniciar sesión para verificar nuevamente.",
@@ -917,7 +921,7 @@
     "change_language": "Cambiar idioma",
     "select_language": "Seleccionar idioma",
     "dark_mode": "Modo oscuro",
-    "light_mode": "Modo de luz"
+    "light_mode": "Modo claro"
   },
   "toast": {
     "please_wait": "Por favor espera...",
@@ -1206,7 +1210,20 @@
     "success_message": "¡Tipo de pago guardado con éxito!",
     "error_message": "¡Error al guardar el tipo de pago!",
     "delete_confirm": "¿Estás seguro? ¡Este proceso es irreversible!",
-    "update_payment_type": "Actualizar tipo de pago"
+    "update_payment_type": "Actualizar tipo de pago",
+    "icons": {
+      "cash": "Efectivo",
+      "card": "Tarjeta",
+      "wallet": "Billetera",
+      "paypal": "PayPal",
+      "qrcode": "Código QR",
+      "reader": "Lector de tarjetas",
+      "bank": "Transferencia bancaria",
+      "discount": "Descuento",
+      "uber": "Uber Eats",
+      "didi": "Didi Food",
+      "rappi": "Rappi Food"
+    }
   },
   "menu_item": {
     "please_wait": "Por favor espera...",
@@ -1247,7 +1264,8 @@
     "enter_variant_title": "Ingrese el título de la variante",
     "enter_variant_price": "Ingrese el precio de la variante",
     "enter_addon_title": "Ingrese el título del complemento",
-    "enter_addon_price": "Ingrese el precio del complemento"
+    "enter_addon_price": "Ingrese el precio del complemento",
+    "select_inventory_item": "Seleccionar artículo de inventario"
   },
   "superadmin_login": {
     "title": "SuperAdmin",

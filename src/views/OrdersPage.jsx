@@ -618,7 +618,7 @@ export default function OrdersPage() {
                     </div>
                     <div>
                       <p className="font-bold">
-                        {table_id ? `${table_title}` : "Dine Out / Delivery"}
+                        {table_id ? `${table_title}` : t('orders.dine_out_or_delivery')}
                       </p>
                       {floor && <p className="text-sm">{floor}</p>}
                     </div>
@@ -732,7 +732,9 @@ export default function OrdersPage() {
                           })}>
                             {" "}
                             <IconCash stroke={iconStroke} size={18} />{" "}
-                            {payment_status.toUpperCase()}
+                            {t(`orders.payment_status.${payment_status}`, {
+                              defaultValue: payment_status,
+                            })}
                           </p>
                         </div>
                       </div>

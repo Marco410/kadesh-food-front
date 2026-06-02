@@ -566,7 +566,11 @@
     "feedback_qr_img_alt": "feedback qr",
     "payment_not_collected_error": "Action cannot be processed because payment has not been collected. Please use the 'Pay & Complete' option instead.",
     "payment_already_collected_error": "Payment Already collected, you can complete the order!",
-    "select_payment_method": "Select Payment Method!"
+    "select_payment_method": "Select Payment Method!",
+    "payment_status": {
+      "pending": "Pending",
+      "paid": "Paid"
+    }
   },
   "no_access": {
     "title": "Oops! You don't have access to this area! Relogin to check again.",
@@ -1205,7 +1209,20 @@
     "success_message": "Payment type saved successfully!",
     "error_message": "Error saving payment type!",
     "delete_confirm": "Are you sure! This process is irreversible!",
-    "update_payment_type": "Update Payment Type"
+    "update_payment_type": "Update Payment Type",
+    "icons": {
+      "cash": "Cash",
+      "card": "Card",
+      "wallet": "Wallet",
+      "paypal": "PayPal",
+      "qrcode": "QR Code",
+      "reader": "Card reader",
+      "bank": "Bank transfer",
+      "discount": "Discount",
+      "uber": "Uber",
+      "didi": "Didi Food",
+      "rappi": "Rappi Food"
+    }
   },
   "menu_item": {
     "please_wait": "Please wait...",
@@ -1246,7 +1263,8 @@
     "enter_variant_title": "Enter Variant Title",
     "enter_variant_price": "Enter Variant Price",
     "enter_addon_title": "Enter Addon Title",
-    "enter_addon_price": "Enter Addon Price"
+    "enter_addon_price": "Enter Addon Price",
+    "select_inventory_item": "Select Inventory Item"
   },
   "superadmin_login": {
     "title": "SuperAdmin",
