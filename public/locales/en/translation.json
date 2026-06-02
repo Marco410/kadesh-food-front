@@ -979,7 +979,8 @@
     "not_found_carrot": "In the meantime, here's a carrot 🥕 to keep you company!",
     "variants": "Variants",
     "addons": "Addons",
-    "add": "ADD"
+    "add": "ADD",
+    "low_stock_badge": "Low Stock - {{count}} Qty"
   },
   "rating": {
     "worst": "Worst",

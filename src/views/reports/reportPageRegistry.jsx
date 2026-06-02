@@ -385,9 +385,9 @@ function PaymentMethodProgressPage({ data, currency, components }) {
   const rows = getRows(data);
   const groupedRows = groupRowsByDate(rows);
   const groupedColumns = [
-    { key: "date", label: "Date", type: "date" },
+    { key: "date", label: t("reports.date"), type: "date" },
     { key: "total", label: "Total", type: "money" },
-    { key: "invoices", label: "Invoices", type: "number" },
+    { key: "invoices", label: t("reports.invoices"), type: "number" },
   ];
 
   return (

@@ -979,7 +979,8 @@
     "not_found_carrot": "Mientras tanto, aquí tienes una zanahoria 🥕 para hacerte compañía.",
     "variants": "Variantes",
     "addons": "Complementos",
-    "add": "AGREGAR"
+    "add": "AGREGAR",
+    "low_stock_badge": "Stock bajo - {{count}} uds."
   },
   "rating": {
     "worst": "Peor",
