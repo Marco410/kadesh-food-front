@@ -16,8 +16,8 @@
     "error_message": "¡Algo salió mal!"
   },
   "home": {
-    "cafe_restaurant": "Café. Restaurante.",
-    "hotel_bar": "Hotel. Bar."
+    "cafe_restaurant": "Vende más.",
+    "hotel_bar": "Administra menos."
   },
   "register": {
     "title": "Registrarse",
