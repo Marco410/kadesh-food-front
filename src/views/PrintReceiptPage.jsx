@@ -14,7 +14,8 @@ export default function PrintReceiptPage() {
     payableTotal,
     tokenNo,
     orderId,
-    paymentMethod
+    paymentMethod,
+    offline,
   } = receiptDetails;
 
   const {
@@ -133,6 +134,12 @@ export default function PrintReceiptPage() {
       </div>
 
       <div className="border-b border-dashed mt-2"></div>
+
+      {offline ? (
+        <p className="my-3 text-center text-xs font-semibold border border-dashed border-amber-400 bg-amber-50 py-2 px-2 rounded">
+          {t("print_receipt.offline_notice")}
+        </p>
+      ) : null}
 
       {footer && <div className='my-2'>
         <p className='my-2 text-center'>{footer}</p>

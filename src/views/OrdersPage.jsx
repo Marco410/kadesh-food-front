@@ -39,6 +39,12 @@ import QRCode from "qrcode"
 import { getQRMenuLink } from "../helpers/QRMenuHelper";
 import { useTheme } from "../contexts/ThemeContext";
 import clsx from "clsx";
+import { useOffline } from "../contexts/OfflineContext";
+import {
+  getActiveOfflineOrderGroups,
+  getOfflineOrdersInit,
+} from "../services/offlineOrdersAdapter";
+import { isNetworkError } from "../helpers/networkError";
 
 export default function OrdersPage() {
   const { t, i18n } = useTranslation();
@@ -46,6 +52,8 @@ export default function OrdersPage() {
   const printReceiptRef = useRef();
   const user = getUserDetailsInLocalStorage();
   const { socket, isSocketConnected } = useContext(SocketContext);
+  const { pendingSyncCount } = useOffline();
+  const tenantId = user?.tenant_id;
 
   const [state, setState] = useState({
     kitchenOrders: [],
@@ -85,6 +93,36 @@ export default function OrdersPage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!state.isLoading) {
+      mergeOfflineOrdersIntoState();
+    }
+  }, [pendingSyncCount, state.isLoading]);
+
+  const mergeOfflineOrdersIntoState = async () => {
+    const offlineGroups = await getActiveOfflineOrderGroups(tenantId);
+    setState((prev) => {
+      const apiOrders = (prev.kitchenOrders || []).filter((order) => !order.offline);
+      return {
+        ...prev,
+        kitchenOrders: [...offlineGroups, ...apiOrders],
+      };
+    });
+  };
+
+  const mergeWithOfflineOrders = async (apiOrders = []) => {
+    const offlineGroups = await getActiveOfflineOrderGroups(tenantId);
+    return [...offlineGroups, ...apiOrders];
+  };
+
+  const guardOfflineOrderGroup = (order, callback) => {
+    if (order?.offline) {
+      toast.error(t('pos.offline.order_readonly_action'));
+      return;
+    }
+    callback();
+  };
+
   const {
     kitchenOrders,
     printSettings,
@@ -104,6 +142,7 @@ export default function OrdersPage() {
       if (ordersResponse.status == 200 && ordersInitResponse.status == 200) {
         const orders = ordersResponse?.data || [];
         const ordersInit = ordersInitResponse.data;
+        const mergedOrders = await mergeWithOfflineOrders(orders);
 
         const currency = CURRENCIES.find(
           (c) => c.cc == ordersInit?.storeSettings?.currency
@@ -111,7 +150,7 @@ export default function OrdersPage() {
 
         setState({
           ...state,
-          kitchenOrders: orders,
+          kitchenOrders: mergedOrders,
           printSettings: ordersInit.printSettings || {},
           storeSettings: ordersInit.storeSettings || {},
           paymentTypes: ordersInit.paymentTypes || {},
@@ -121,13 +160,35 @@ export default function OrdersPage() {
       }
     } catch (error) {
       console.error(error);
-      toast.dismiss();
-      toast.error("Error loading orders! Please try later!");
 
-      setState({
-        ...state,
-        isLoading: false,
-      });
+      try {
+        const offlineGroups = await getActiveOfflineOrderGroups(tenantId);
+        const cachedInit = await getOfflineOrdersInit(tenantId);
+        const currency = cachedInit?.storeSettings?.currency
+          ? CURRENCIES.find((c) => c.cc == cachedInit.storeSettings.currency)
+          : null;
+
+        setState({
+          ...state,
+          kitchenOrders: offlineGroups,
+          printSettings: cachedInit?.printSettings || {},
+          storeSettings: cachedInit?.storeSettings || {},
+          paymentTypes: cachedInit?.paymentTypes || [],
+          currency: currency?.symbol,
+          isLoading: false,
+        });
+
+        if (offlineGroups.length === 0 && isNetworkError(error)) {
+          toast.error(t('orders.error_loading_orders'));
+        }
+      } catch (offlineError) {
+        console.error(offlineError);
+        toast.error(t('orders.error_loading_orders'));
+        setState({
+          ...state,
+          isLoading: false,
+        });
+      }
     }
   };
 
@@ -138,23 +199,32 @@ export default function OrdersPage() {
       toast.dismiss();
       if (res.status == 200) {
         toast.success(t('orders.orders_loaded'));
+        const mergedOrders = await mergeWithOfflineOrders(res.data);
         setState({
           ...state,
-          kitchenOrders: res.data,
+          kitchenOrders: mergedOrders,
           isLoading: false,
         });
       }
     } catch (error) {
-      const message =
-        error.response.data.message ||
-        "Error loading orders! Please try later!";
+      const message = isNetworkError(error)
+        ? t('orders.error_loading_orders')
+        : error?.response?.data?.message || t('orders.error_loading_orders');
       console.error(error);
       toast.dismiss();
-      toast.error(message);
+
+      const offlineGroups = await getActiveOfflineOrderGroups(tenantId);
       setState({
         ...state,
+        kitchenOrders: offlineGroups,
         isLoading: false,
       });
+
+      if (offlineGroups.length > 0) {
+        toast(t('pos.offline.using_cache'), { icon: '📦' });
+      } else {
+        toast.error(message);
+      }
     }
   };
 
@@ -595,7 +665,7 @@ export default function OrdersPage() {
       {kitchenOrders?.length > 0 && (
         <div className={`mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 `}>
           {kitchenOrders.map((order, index) => {
-            const { table_id, table_title, floor, orders, order_ids } = order;
+            const { table_id, table_title, floor, orders, order_ids, offline } = order;
 
             const tokenNoArray = orders.map(o=>o.token_no);
             const tokens = tokenNoArray.join(",")
@@ -605,7 +675,11 @@ export default function OrdersPage() {
             return (
               <div
                 key={index}
-                className = "flex flex-col divide-y divide-dashed divide-gray-200 dark:divide-gray-700 px-4 py-5 border rounded-2xl border-restro-border-green"
+                className = {`flex flex-col divide-y divide-dashed divide-gray-200 dark:divide-gray-700 px-4 py-5 border rounded-2xl ${
+                  offline
+                    ? "border-amber-300 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-700"
+                    : "border-restro-border-green"
+                }`}
               >
                 <div className="flex md:items-center flex-col md:flex-row md:justify-between md:text-center gap-2 pb-2">
                   <div className="flex items-center gap-2">
@@ -617,9 +691,16 @@ export default function OrdersPage() {
                       )}
                     </div>
                     <div>
-                      <p className="font-bold">
-                        {table_id ? `${table_title}` : t('orders.dine_out_or_delivery')}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-bold">
+                          {table_id ? `${table_title}` : t('orders.dine_out_or_delivery')}
+                        </p>
+                        {offline && (
+                          <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-100">
+                            {t('pos_offline_order_badge')}
+                          </span>
+                        )}
+                      </div>
                       {floor && <p className="text-sm">{floor}</p>}
                     </div>
                   </div>
@@ -639,7 +720,9 @@ export default function OrdersPage() {
                         <button
                           className="flex items-center gap-2 bg-transparent border-none shadow-none "
                           onClick={() => {
-                            btnPrintReceipt(order_ids, tokens);
+                            guardOfflineOrderGroup(order, () => {
+                              btnPrintReceipt(order_ids, tokens);
+                            });
                           }}
                         >
                           <IconReceipt size={18} stroke={iconStroke} /> {t('orders.print_receipt')}
@@ -649,7 +732,9 @@ export default function OrdersPage() {
                         <button
                           className="flex items-center gap-2 bg-transparent border-none shadow-none "
                           onClick={() => {
-                            btnCollectFeedback(order_ids);
+                            guardOfflineOrderGroup(order, () => {
+                              btnCollectFeedback(order_ids);
+                            });
                           }}
                         >
                           <IconStars size={18} stroke={iconStroke} /> {t('orders.collect_feedback')}
@@ -659,7 +744,9 @@ export default function OrdersPage() {
                         <button
                           className="flex items-center gap-2 bg-transparent border-none shadow-none text-restro-red"
                           onClick={() => {
-                            btnShowCancelOrderModal(order_ids);
+                            guardOfflineOrderGroup(order, () => {
+                              btnShowCancelOrderModal(order_ids);
+                            });
                           }}
                         >
                           <IconX size={18} stroke={iconStroke} /> {t('orders.cancel')}
@@ -669,11 +756,13 @@ export default function OrdersPage() {
                         <button
                           className="flex items-center gap-2 bg-transparent border-none shadow-none text-restro-green"
                           onClick={() => {
-                            if(isPaid == false) {
-                              toast.error(t('orders.payment_not_collected_error'));
-                              return;
-                            }
-                            btnShowCompleteOrderModal(order_ids);
+                            guardOfflineOrderGroup(order, () => {
+                              if(isPaid == false) {
+                                toast.error(t('orders.payment_not_collected_error'));
+                                return;
+                              }
+                              btnShowCompleteOrderModal(order_ids);
+                            });
                           }}
                         >
                           <IconCheck size={18} stroke={iconStroke} /> {t('orders.complete')}
@@ -683,11 +772,13 @@ export default function OrdersPage() {
                         <button
                           className="flex items-center gap-2 bg-transparent border-none shadow-none "
                           onClick={() => {
-                            if(isPaid == true) {
-                              toast.error(t('orders.payment_already_collected_error'));
-                              return;
-                            }
-                            btnShowPayAndComplete(order_ids, order);
+                            guardOfflineOrderGroup(order, () => {
+                              if(isPaid == true) {
+                                toast.error(t('orders.payment_already_collected_error'));
+                                return;
+                              }
+                              btnShowPayAndComplete(order_ids, order);
+                            });
                           }}
                         >
                           <IconCash size={18} stroke={iconStroke} /> {t('orders.pay_complete')}
@@ -709,6 +800,7 @@ export default function OrdersPage() {
                     payment_status,
                     token_no,
                     items,
+                    offline: orderOffline,
                   } = o;
 
                   return (
@@ -812,6 +904,7 @@ export default function OrdersPage() {
                               {/* item title */}
 
                               {/* action */}
+                              {!orderOffline && (
                               <div className="dropdown dropdown-left">
                                 <div
                                   tabIndex={0}
@@ -894,6 +987,7 @@ export default function OrdersPage() {
                                   </li>
                                 </ul>
                               </div>
+                              )}
                               {/* action */}
                             </div>
                           );
