@@ -3,19 +3,24 @@ import { useTranslation } from "react-i18next";
 import Page from "../components/Page";
 import { iconStroke } from "../config/config";
 import { IconArmchair, IconBoxSeam, IconCheck, IconChecks, IconClock, IconRefresh, IconX } from "@tabler/icons-react";
-import { getKitchenOrders, updateKitchenOrderItemStatus, useKitchenOrders } from "../controllers/kitchen.controller";
+import { getKitchenOrders, updateKitchenOrderItemStatus } from "../controllers/kitchen.controller";
 import { toast } from "react-hot-toast";
 import { SocketContext } from "../contexts/SocketContext";
 import { initSocket } from "../utils/socket";
 import { textToSpeech } from "../utils/textToSpeech";
 import { getUserDetailsInLocalStorage } from "../helpers/UserDetails";
 import { useTheme } from "../contexts/ThemeContext";
+import { useOffline } from "../contexts/OfflineContext";
+import { getActiveOfflineKitchenOrders } from "../services/offlineOrdersAdapter";
+import { isNetworkError } from "../helpers/networkError";
 
 export default function KitchenPage() {
   const { t } = useTranslation();
   const user = getUserDetailsInLocalStorage();
   const { socket, isSocketConnected } = useContext(SocketContext);
   const { theme } = useTheme();
+  const { pendingSyncCount } = useOffline();
+  const tenantId = user?.tenant_id;
   
   const [state, setState] = useState({
     kitchenOrders: [],
@@ -33,6 +38,28 @@ export default function KitchenPage() {
     }
   },[])
 
+  useEffect(() => {
+    if (!state.isLoading) {
+      mergeOfflineOrdersIntoState();
+    }
+  }, [pendingSyncCount, state.isLoading]);
+
+  const mergeOfflineOrdersIntoState = async () => {
+    const offlineOrders = await getActiveOfflineKitchenOrders(tenantId);
+    setState((prev) => {
+      const apiOrders = (prev.kitchenOrders || []).filter((order) => !order.offline);
+      return {
+        ...prev,
+        kitchenOrders: [...offlineOrders, ...apiOrders],
+      };
+    });
+  };
+
+  const mergeWithOfflineOrders = async (apiOrders = []) => {
+    const offlineOrders = await getActiveOfflineKitchenOrders(tenantId);
+    return [...offlineOrders, ...apiOrders];
+  };
+
   const { kitchenOrders, isLoading } = state;
 
   const _init = async () => {
@@ -41,22 +68,37 @@ export default function KitchenPage() {
 
       if(res.status == 200) {
         const orders = res?.data || [];
+        const mergedOrders = await mergeWithOfflineOrders(orders);
 
         setState({
           ...state,
-          kitchenOrders: orders || [],
+          kitchenOrders: mergedOrders || [],
           isLoading: false,
         });
       }
     } catch (error) {
       console.error(error);
-      toast.dismiss();
-      toast.error(t('kitchen.error_loading_orders'));
 
-      setState({
-        ...state,
-        isLoading: false,
-      });
+      try {
+        const offlineOrders = await getActiveOfflineKitchenOrders(tenantId);
+        setState({
+          ...state,
+          kitchenOrders: offlineOrders || [],
+          isLoading: false,
+        });
+
+        if (offlineOrders.length === 0 && isNetworkError(error)) {
+          toast.error(t('kitchen.error_loading_orders'));
+        }
+      } catch (offlineError) {
+        console.error(offlineError);
+        toast.dismiss();
+        toast.error(t('kitchen.error_loading_orders'));
+        setState({
+          ...state,
+          isLoading: false,
+        });
+      }
     }
   }
 
@@ -112,22 +154,30 @@ export default function KitchenPage() {
       if(res.status == 200) {
         toast.dismiss();
         const orders = res?.data || [];
+        const mergedOrders = await mergeWithOfflineOrders(orders);
 
         setState({
           ...state,
-          kitchenOrders: orders || [],
+          kitchenOrders: mergedOrders || [],
           isLoading: false,
         });
       }
     } catch (error) {
       console.error(error);
       toast.dismiss();
-      toast.error(t('kitchen.error_loading_orders'));
 
+      const offlineOrders = await getActiveOfflineKitchenOrders(tenantId);
       setState({
         ...state,
+        kitchenOrders: offlineOrders || [],
         isLoading: false,
       });
+
+      if (offlineOrders.length > 0) {
+        toast(t('pos.offline.using_cache'), { icon: '📦' });
+      } else {
+        toast.error(t('kitchen.error_loading_orders'));
+      }
     }
   }
 
@@ -221,16 +271,28 @@ export default function KitchenPage() {
               payment_status,
               token_no,
               items,
+              offline,
             } = order;
 
-            return <div key={index} className='border  rounded-2xl px-4 py-5 flex flex-col border-restro-border-green'>
+            return <div key={index} className={`border rounded-2xl px-4 py-5 flex flex-col ${
+              offline
+                ? "border-amber-300 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-700"
+                : "border-restro-border-green"
+            }`}>
               <div className="flex items-center flex-col md:flex-row md:justify-between text-center gap-2">
                 <div className="flex items-center gap-2">
                   <div className='flex w-12 h-12 rounded-full items-center justify-center bg-restro-gray text-restro-text'>
                     {delivery_type == "dinein" ? <IconArmchair size={24} stroke={iconStroke} />:<IconBoxSeam size={24} stroke={iconStroke} />}
                   </div>
                   <div>
-                    <p className="font-bold">{table_id?`${table_title}`:new String(`${delivery_type} ${customer_type}`).toUpperCase()}</p>
+                    <div className="flex flex-wrap items-center gap-2 justify-center md:justify-start">
+                      <p className="font-bold">{table_id?`${table_title}`:new String(`${delivery_type} ${customer_type}`).toUpperCase()}</p>
+                      {offline && (
+                        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-100">
+                          {t('pos_offline_order_badge')}
+                        </span>
+                      )}
+                    </div>
                     {floor && <p className="text-sm">{floor}</p>}
                   </div>
                 </div>
@@ -276,8 +338,8 @@ export default function KitchenPage() {
                       {/* item title */}
 
                       {/* action */}
-                      {status == "created" && <button onClick={()=>{btnStartPreparingOrderItem(orderItemId)}} className='btn btn-sm border transition active:scale-95 hover:shadow-lg rounded-lg border-restro-border-green text-restro-text hover:bg-restro-button-hover'>{t('kitchen.start_making')}</button>}
-                      {status == "preparing" && <button onClick={()=>{btnCompletePreparingOrderItem(orderItemId)}}  className='btn btn-sm border transition active:scale-95 hover:shadow-lg rounded-lg border-restro-border-green text-restro-text hover:bg-restro-button-hover'>{t('kitchen.complete')}</button>}
+                      {!offline && status == "created" && <button onClick={()=>{btnStartPreparingOrderItem(orderItemId)}} className='btn btn-sm border transition active:scale-95 hover:shadow-lg rounded-lg border-restro-border-green text-restro-text hover:bg-restro-button-hover'>{t('kitchen.start_making')}</button>}
+                      {!offline && status == "preparing" && <button onClick={()=>{btnCompletePreparingOrderItem(orderItemId)}}  className='btn btn-sm border transition active:scale-95 hover:shadow-lg rounded-lg border-restro-border-green text-restro-text hover:bg-restro-button-hover'>{t('kitchen.complete')}</button>}
                       {/* action */}
                     </div>
                   })

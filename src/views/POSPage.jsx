@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import Page from "../components/Page";
 import { IconPlus, IconNotes, IconArmchair, IconScreenShare, IconSearch, IconDeviceFloppy, IconChefHat, IconCash, IconMinus, IconNote, IconTrash, IconFilter, IconPhoto, IconFilterFilled, IconClipboardList, IconX, IconClearAll, IconPencil, IconCheck, IconCarrot, IconRotate, IconQrcode, IconArmchair2, IconUser, IconCategory, IconGridDots, IconLayoutGrid, IconListDetails, IconListTree, IconMenu4, IconLayoutGridFilled, IconMenu2, IconLayoutList, IconLayout2, IconLayout2Filled, IconAlertTriangleFilled } from "@tabler/icons-react";
 import { VITE_BACKEND_SOCKET_IO, iconStroke } from "../config/config";
-import { cancelAllQROrders, cancelQROrder, createOrder, createOrderAndInvoice, getDrafts, getQROrders, getQROrdersCount, initPOS, setDrafts } from "../controllers/pos.controller";
+import { cancelAllQROrders, cancelQROrder, getDrafts, getQROrders, getQROrdersCount, setDrafts } from "../controllers/pos.controller";
+import {
+  createOrderAndInvoiceOfflineAware,
+  createOrderOfflineAware,
+  initPOSWithCache,
+} from "../services/posSyncService";
 import { CURRENCIES } from '../config/currencies.config';
 import { PAYMENT_ICONS } from "../config/payment_icons";
 import { toast } from "react-hot-toast";
@@ -20,6 +25,7 @@ import POSMenuItemDetailedView from '../components/POSMenuItemDetailedView';
 import POSMenuItemCompactView from '../components/POSMenuItemCompactView';
 import { clsx } from "clsx";
 import { useTheme } from '../contexts/ThemeContext';
+import { useOffline } from '../contexts/OfflineContext';
 
 export default function POSPage() {
   const { t } = useTranslation();
@@ -27,6 +33,12 @@ export default function POSPage() {
   const { socket, isSocketConnected } = useContext(SocketContext);
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const {
+    isOfflineMode,
+    setUsingOfflineData,
+    loadPendingSyncCount,
+    registerSyncSuccess,
+  } = useOffline();
   const diningOptionRef = useRef();
   const tableRef = useRef();
 
@@ -86,7 +98,11 @@ export default function POSPage() {
     selectedQrOrderItem: null,
 
     selectedPaymentType: null,
+
+    cacheLoadedAt: null,
   });
+
+  const tenantId = user?.tenant_id;
 
   useEffect(()=>{
     _initPOS();
@@ -111,9 +127,13 @@ export default function POSPage() {
     tapSound.play();
   }
 
-  async function _initPOS() {
+  async function _initPOS(showLoading = true) {
     try {
-      const res = await initPOS();
+      if (showLoading) {
+        setState((prev) => ({ ...prev, isLoading: true }));
+      }
+
+      const res = await initPOSWithCache(tenantId);
       let totalQROrders = 0;
 
       if(res.status == 200) {
@@ -121,10 +141,22 @@ export default function POSPage() {
 
         const currency = CURRENCIES.find((c)=>c.cc==data?.storeSettings?.currency);
 
-        try {
-          totalQROrders = await _getQROrdersCount();
-        } catch (error) {
-          console.log(error);
+        if (res.fromCache) {
+          setUsingOfflineData(true);
+          setState((prev) => ({
+            ...prev,
+            cacheLoadedAt: res.cachedAt || prev.cacheLoadedAt,
+          }));
+        } else if (navigator.onLine) {
+          setUsingOfflineData(false);
+        }
+
+        if (navigator.onLine) {
+          try {
+            totalQROrders = await _getQROrdersCount();
+          } catch (error) {
+            console.log(error);
+          }
         }
 
         const savedView = sessionStorage.getItem('view') || 'detailed';
@@ -143,11 +175,23 @@ export default function POSPage() {
           qrOrdersCount: totalQROrders || 0,
           isLoading: false,
         }));
+
+        if (res.fromCache) {
+          toast(t('pos.offline.using_cache'), { icon: '📦' });
+        }
       }
     } catch (error) {
       console.error(error);
+      toast.error(t('pos.offline.no_cache'));
+      setState((prev) => ({ ...prev, isLoading: false }));
     }
   }
+
+  useEffect(() => {
+    return registerSyncSuccess(() => {
+      _initPOS(false);
+    });
+  }, [registerSyncSuccess, tenantId]);
 
   const _getQROrdersCount = async () => {
     try {
@@ -513,6 +557,9 @@ export default function POSPage() {
 
   // QR Menu Orders
   const btnShowQROrdersModal = async () => {
+    if (isOfflineMode) {
+      return toast.error(t('pos.offline.qr_unavailable'));
+    }
     try {
       const res = await getQROrders();
       if(res.status == 200) {
@@ -707,6 +754,81 @@ export default function POSPage() {
       itemsTotal, taxTotal, serviceChargeTotal, payableTotal
     }
   };
+
+  const applyOrderSuccess = ({
+    data,
+    offline,
+    closeModalId,
+    paymentMethodText = null,
+  }) => {
+    toast.success(offline ? t('pos.offline.order_saved') : data.message);
+    document.getElementById(closeModalId)?.close();
+
+    const page_format = printSettings?.page_format || null;
+    const is_enable_print = printSettings?.is_enable_print || 0;
+
+    setDetailsForReceiptPrint({
+      cartItems,
+      deliveryType: diningOptionRef.current.value,
+      customerType,
+      customer,
+      tableId: tableRef.current.value,
+      currency,
+      storeSettings,
+      printSettings,
+      itemsTotal: state.itemsTotal,
+      taxTotal: state.taxTotal,
+      serviceChargeTotal: state.serviceChargeTotal,
+      payableTotal: state.payableTotal,
+      tokenNo: data.tokenNo,
+      orderId: data.orderId,
+      paymentMethod: paymentMethodText,
+      offline,
+    });
+
+    if (!offline) {
+      sendNewOrderEvent(data.tokenNo, data.orderId);
+    }
+
+    let newQROrderItemCount = state.qrOrdersCount;
+    let newQROrders = [];
+    if (state.selectedQrOrderItem) {
+      newQROrderItemCount -= 1;
+      newQROrders = state?.qrOrders?.filter((item) => item.id != state.selectedQrOrderItem);
+    }
+
+    setState((prev) => ({
+      ...prev,
+      cartItems: [],
+      tokenNo: data.tokenNo,
+      orderId: data.orderId,
+      selectedQrOrderItem: null,
+      qrOrders: newQROrders,
+      qrOrdersCount: newQROrderItemCount,
+      selectedPaymentType: null,
+    }));
+
+    if (offline) {
+      loadPendingSyncCount();
+    } else {
+      _initPOS(false);
+    }
+
+    if (is_enable_print) {
+      setTimeout(() => {
+        const receiptWindow = window.open("/print-receipt", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
+        receiptWindow.onload = () => {
+          setTimeout(() => {
+            receiptWindow.print();
+          }, 800);
+        };
+      }, 100);
+      return;
+    }
+
+    document.getElementById("modal-print-token").showModal();
+  };
+
   const btnShowPayAndSendToKitchenModal = () => {
     // calculate the item - total, tax, incl. tax, excl. tax, tax total, payable total
 
@@ -737,72 +859,36 @@ export default function POSPage() {
       const customer = state.customer;
 
       toast.loading(t('pos.please_wait'));
-      const res = await createOrderAndInvoice(cartItems, deliveryType, customerType, customer, tableId, state.itemsTotal, state.taxTotal, state.serviceChargeTotal , state.payableTotal, state.selectedQrOrderItem, state.selectedPaymentType);
+      const res = await createOrderAndInvoiceOfflineAware(tenantId, {
+        cart: cartItems,
+        deliveryType,
+        customerType,
+        customer,
+        tableId,
+        netTotal: state.itemsTotal,
+        taxTotal: state.taxTotal,
+        serviceChargeTotal: state.serviceChargeTotal,
+        total: state.payableTotal,
+        selectedQrOrderItem: state.selectedQrOrderItem,
+        selectedPaymentType: state.selectedPaymentType,
+      });
       toast.dismiss();
       if(res.status == 200) {
         const data = res.data;
-        toast.success(res.data.message);
-        document.getElementById("modal-pay-and-send-kitchen-summary").close();
-
-        const page_format = printSettings?.page_format || null;
-        const is_enable_print = printSettings?.is_enable_print || 0;
-
         const paymentType = paymentTypes.find((v)=>v.id == state.selectedPaymentType);
-        let paymentMethodText;
-        if(paymentType) {
-          paymentMethodText = paymentType.title;
-        }
+        const paymentMethodText = paymentType?.title;
 
-        setDetailsForReceiptPrint({
-          cartItems, deliveryType, customerType, customer, tableId, currency, storeSettings, printSettings,
-          itemsTotal: state.itemsTotal,
-          taxTotal: state.taxTotal,
-          serviceChargeTotal:state.serviceChargeTotal,
-          payableTotal: state.payableTotal,
-          tokenNo: data.tokenNo,
-          orderId: data.orderId,
-          paymentMethod: paymentMethodText
+        applyOrderSuccess({
+          data,
+          offline: Boolean(res.offline),
+          closeModalId: "modal-pay-and-send-kitchen-summary",
+          paymentMethodText,
         });
-
-        sendNewOrderEvent(data.tokenNo, data.orderId);
-
-        let newQROrderItemCount = state.qrOrdersCount;
-        let newQROrders = [];
-        if(state.selectedQrOrderItem) {
-          newQROrderItemCount -= 1;
-          newQROrders = state?.qrOrders?.filter((item)=>item.id != state.selectedQrOrderItem);
-        }
-
-        setState((prev) => ({
-          ...prev,
-          cartItems: [],
-          tokenNo: data.tokenNo,
-          orderId: data.orderId,
-          selectedQrOrderItem: null,
-          qrOrders: newQROrders,
-          qrOrdersCount: newQROrderItemCount,
-          selectedPaymentType: null,
-        }))
-
-        _initPOS()
-
-        if(is_enable_print) {
-          setTimeout(()=>{
-            const receiptWindow = window.open("/print-receipt", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
-            receiptWindow.onload = (e) => {
-              setTimeout(()=>{
-                receiptWindow.print();
-              },800)
-            }
-          }, 100)
-          return;
-        }
-
-        // show print token dialog
-        document.getElementById("modal-print-token").showModal();
       }
     } catch (error) {
-      const message = error?.response?.data?.message || t('pos.something_went_wrong');
+      const message = error?.message === 'qr_order_offline_unavailable'
+        ? t('pos.offline.qr_unavailable')
+        : error?.response?.data?.message || t('pos.something_went_wrong');
       console.error(error);
 
       toast.dismiss();
@@ -838,64 +924,26 @@ export default function POSPage() {
       const customer = state.customer;
 
       toast.loading(t('pos.please_wait'));
-      const res = await createOrder(cartItems, deliveryType, customerType, customer, tableId, state.selectedQrOrderItem);
+      const res = await createOrderOfflineAware(tenantId, {
+        cart: cartItems,
+        deliveryType,
+        customerType,
+        customer,
+        tableId,
+        selectedQrOrderItem: state.selectedQrOrderItem,
+      });
       toast.dismiss();
       if(res.status == 200) {
-        const data = res.data;
-        toast.success(res.data.message);
-        document.getElementById("modal-send-kitchen-summary").close();
-
-        const page_format = printSettings?.page_format || null;
-        const is_enable_print = printSettings?.is_enable_print || 0;
-
-        setDetailsForReceiptPrint({
-          cartItems, deliveryType, customerType, customer, tableId, currency, storeSettings, printSettings,
-          itemsTotal: state.itemsTotal,
-          taxTotal: state.taxTotal,
-          serviceChargeTotal:state.serviceChargeTotal,
-          payableTotal: state.payableTotal,
-          tokenNo: data.tokenNo,
-          orderId: data.orderId
+        applyOrderSuccess({
+          data: res.data,
+          offline: Boolean(res.offline),
+          closeModalId: "modal-send-kitchen-summary",
         });
-
-        sendNewOrderEvent(data.tokenNo, data.orderId);
-
-        let newQROrderItemCount = state.qrOrdersCount;
-        let newQROrders = [];
-        if(state.selectedQrOrderItem) {
-          newQROrderItemCount -= 1;
-          newQROrders = state?.qrOrders?.filter((item)=>item.id != state.selectedQrOrderItem);
-        }
-
-        setState((prev) => ({
-          ...prev,
-          cartItems: [],
-          tokenNo: data.tokenNo,
-          orderId: data.orderId,
-          selectedQrOrderItem: null,
-          qrOrders: newQROrders,
-          qrOrdersCount: newQROrderItemCount
-        }))
-
-        _initPOS()
-
-        if(is_enable_print) {
-          setTimeout(()=>{
-            const receiptWindow = window.open("/print-receipt", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
-            receiptWindow.onload = (e) => {
-              setTimeout(()=>{
-                receiptWindow.print();
-              },800)
-            }
-          }, 100)
-          return;
-        }
-
-        // show print token dialog
-        document.getElementById("modal-print-token").showModal();
       }
     } catch (error) {
-      const message = error?.response?.data?.message || t('pos.something_went_wrong');
+      const message = error?.message === 'qr_order_offline_unavailable'
+        ? t('pos.offline.qr_unavailable')
+        : error?.response?.data?.message || t('pos.something_went_wrong');
       console.error(error);
 
       toast.dismiss();

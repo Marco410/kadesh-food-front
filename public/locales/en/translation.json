@@ -1878,6 +1878,7 @@
     "low_stock": "Low Stock",
     "qty": "Qty"
   },
+  "pos_offline_order_badge": "Offline order",
   "refresh_page": {
     "title": "Session Expired",
     "description": "We couldn't refresh your session automatically. Please refresh the page or sign in again to continue.",

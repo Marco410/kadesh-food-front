@@ -2,6 +2,20 @@ import ApiClient from "../helpers/ApiClient";
 
 const DRAFTS_KEY = "KADESHFOOD__DRAFTS";
 
+function buildOfflineHeaders(options = {}) {
+  const headers = {};
+
+  if (options.idempotencyKey) {
+    headers["X-Idempotency-Key"] = options.idempotencyKey;
+  }
+
+  if (options.offlineCreatedAt) {
+    headers["X-Offline-Created-At"] = options.offlineCreatedAt;
+  }
+
+  return headers;
+}
+
 export async function initPOS() {
     try {
       const response = await ApiClient.get("/pos/init");
@@ -11,10 +25,12 @@ export async function initPOS() {
     }
 }
 
-export async function createOrder(cart, deliveryType, customerType, customerId, tableId, selectedQrOrderItem) {
+export async function createOrder(cart, deliveryType, customerType, customerId, tableId, selectedQrOrderItem, options = {}) {
   try {
     const response = await ApiClient.post("/pos/create-order", {
       cart, deliveryType, customerType, customerId, tableId, selectedQrOrderItem
+    }, {
+      headers: buildOfflineHeaders(options),
     });
     return response;
   } catch (error) {
@@ -22,11 +38,13 @@ export async function createOrder(cart, deliveryType, customerType, customerId, 
   }
 }
 
-export async function createOrderAndInvoice(cart, deliveryType, customerType, customerId, tableId, netTotal, taxTotal, serviceChargeTotal, total, selectedQrOrderItem, selectedPaymentType) {
+export async function createOrderAndInvoice(cart, deliveryType, customerType, customerId, tableId, netTotal, taxTotal, serviceChargeTotal, total, selectedQrOrderItem, selectedPaymentType, options = {}) {
   try {
     const response = await ApiClient.post("/pos/create-order-and-invoice", {
       cart, deliveryType, customerType, customerId, tableId,
       netTotal, taxTotal, serviceChargeTotal, total, selectedQrOrderItem, selectedPaymentType
+    }, {
+      headers: buildOfflineHeaders(options),
     });
     return response;
   } catch (error) {
