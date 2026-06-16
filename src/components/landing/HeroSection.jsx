@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { IconArrowRight, IconPlayerPlay } from "@tabler/icons-react";
+import { IconArrowRight, IconCalendarEvent, IconPlayerPlay } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { LANDING_ANCHORS } from "./constants";
+import { handleAnchorClick } from "./landingScroll";
 import { useMotionConfig } from "./useReducedMotionSafe";
 
 export default function HeroSection() {
@@ -39,7 +40,7 @@ export default function HeroSection() {
             Todo en la nube, sin instalaciones complicadas.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+          <div className="mt-8 flex flex-col sm:flex-row flex-wrap gap-4">
             <Link
               to="/register"
               className="inline-flex items-center justify-center gap-2 bg-restro-green text-white font-semibold px-8 py-4 rounded-xl hover:bg-restro-green-button-hover transition-all hover:scale-[1.02] shadow-lg"
@@ -48,8 +49,17 @@ export default function HeroSection() {
               <IconArrowRight size={20} />
             </Link>
             <a
+              href={LANDING_ANCHORS.demo}
+              onClick={handleAnchorClick(LANDING_ANCHORS.demo)}
+              className="inline-flex items-center justify-center gap-2 bg-white text-restro-green font-semibold px-8 py-4 rounded-xl border-2 border-restro-green hover:bg-restro-green-10 transition-colors shadow-sm"
+            >
+              <IconCalendarEvent size={20} />
+              Agendar demo
+            </a>
+            <a
               href={LANDING_ANCHORS.plataforma}
-              className="inline-flex items-center justify-center gap-2 border-2 border-restro-green text-restro-green font-semibold px-8 py-4 rounded-xl hover:bg-restro-green-10 transition-colors"
+              onClick={handleAnchorClick(LANDING_ANCHORS.plataforma)}
+              className="inline-flex items-center justify-center gap-2 border-2 border-restro-border-green text-gray-700 font-semibold px-8 py-4 rounded-xl hover:bg-restro-gray/50 transition-colors"
             >
               <IconPlayerPlay size={20} />
               Ver plataforma

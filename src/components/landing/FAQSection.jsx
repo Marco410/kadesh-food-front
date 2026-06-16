@@ -9,7 +9,7 @@ export default function FAQSection() {
   const { fadeUp, reduced } = useMotionConfig();
 
   return (
-    <section id="faq" className="py-20 px-4 bg-white">
+    <section id="faq" className="py-4 px-4 bg-white">
       <div className="max-w-3xl mx-auto">
         <motion.div {...fadeUp} className="text-center mb-12">
           <span className="text-restro-green font-semibold text-sm uppercase tracking-wider">

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import Logo from "../../assets/logo.svg";
 import { LANDING_ANCHORS } from "./constants";
+import { handleAnchorClick } from "./landingScroll";
 
 const navLinks = [
   { label: "Plataforma", href: LANDING_ANCHORS.plataforma },
@@ -18,8 +19,12 @@ export default function LandingNav() {
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-restro-border-green">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href={LANDING_ANCHORS.inicio} className="flex items-center gap-2">
-          <img src={Logo} alt="Kadesh FOOD" className="h-10" />
+        <a
+          href={LANDING_ANCHORS.inicio}
+          className="flex items-center gap-2"
+          onClick={handleAnchorClick(LANDING_ANCHORS.inicio)}
+        >
+          <img src={Logo} alt="Kadesh FOOD" className="h-20  w-20" />
         </a>
 
         <nav className="hidden lg:flex items-center gap-6">
@@ -28,6 +33,7 @@ export default function LandingNav() {
               key={link.href}
               href={link.href}
               className="text-sm font-medium text-restro-text hover:text-restro-green transition-colors"
+              onClick={handleAnchorClick(link.href)}
             >
               {link.label}
             </a>
@@ -66,7 +72,7 @@ export default function LandingNav() {
               key={link.href}
               href={link.href}
               className="block text-sm font-medium py-2"
-              onClick={() => setOpen(false)}
+              onClick={handleAnchorClick(link.href, () => setOpen(false))}
             >
               {link.label}
             </a>

@@ -41,7 +41,7 @@ export default function LandingPricingSection() {
   };
 
   return (
-    <section id="planes" className="py-20 px-4 bg-white">
+    <section id="planes" className="py-5 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp} className="text-center mb-4">
           <span className="inline-block bg-restro-green-10 text-restro-green text-sm font-semibold px-4 py-1 rounded-full mb-6 uppercase">

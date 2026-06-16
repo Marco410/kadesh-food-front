@@ -21,7 +21,7 @@ export default function PersonaBenefitsSection() {
           </h2>
         </motion.div>
 
-        <div className="flex justify-center gap-3 mb-10">
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {LANDING_PERSONAS.map((persona) => (
             <button
               key={persona.id}

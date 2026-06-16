@@ -16,7 +16,7 @@ export default function PlatformShowcaseSection() {
             Plataforma
           </span>
           <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-gray-900">
-            Todo lo que tu restaurante necesita
+            Todo lo que tu negocio necesita
           </h2>
           <p className="mt-4 text-restro-text max-w-2xl mx-auto">
             Explora cada módulo del sistema. Un solo software para operar, vender y crecer.

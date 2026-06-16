@@ -12,12 +12,62 @@ export const FOOD_BRAND_COLORS = {
 
 export const LANDING_DOMAIN = "https://food.kadesh.com.mx";
 
+export const LANDING_WHATSAPP = {
+  phone: "524439382330",
+  message: "Hola, tengo una duda sobre Kadesh FOOD.",
+  label: "Escríbenos por WhatsApp",
+};
+
+export function buildWhatsAppUrl(message) {
+  return `https://wa.me/${LANDING_WHATSAPP.phone}?text=${encodeURIComponent(message)}`;
+}
+
+export function buildDemoWhatsAppMessage(day, time) {
+  return `Hola, me gustaría agendar una demo en vivo de Kadesh FOOD (15 min).\n\nDía: ${day}\nHorario: ${time}\n\n¡Gracias!`;
+}
+
+export const LANDING_DEMO = {
+  title: "Agenda una demo en vivo (15 min)",
+  subtitle:
+    "En una sesión corta te mostramos cómo Kadesh FOOD puede ayudar a tu restaurante. Elige día y horario; te llevamos a WhatsApp con el mensaje listo.",
+  dayLabel: "Día (lunes — viernes)",
+  timeLabel: "Horario",
+  hint: "Selecciona un día y una hora para continuar.",
+  ctaLabel: "Agendar demo",
+  days: [
+    { id: "lunes", label: "Lunes" },
+    { id: "martes", label: "Martes" },
+    { id: "miercoles", label: "Miércoles" },
+    { id: "jueves", label: "Jueves" },
+    { id: "viernes", label: "Viernes" },
+  ],
+  times: [
+    { id: "09:00", label: "9:00 a. m." },
+    { id: "09:30", label: "9:30 a. m." },
+    { id: "11:30", label: "11:30 a. m." },
+    { id: "12:00", label: "12:00 p. m." },
+    { id: "15:30", label: "3:30 p. m." },
+    { id: "16:00", label: "4:00 p. m." },
+    { id: "16:30", label: "4:30 p. m." },
+  ],
+};
+
 export const LANDING_ANCHORS = {
   inicio: "#inicio",
+  demo: "#demo",
   comoFunciona: "#como-funciona",
   plataforma: "#plataforma",
+  dashboard: "#dashboard",
+  pos: "#pos",
+  cocina: "#cocina",
+  pedidos: "#pedidos",
+  reservaciones: "#reservaciones",
+  clientes: "#clientes",
+  menuQr: "#menu-qr",
   planes: "#planes",
   beneficios: "#beneficios",
+  inventario: "#inventario",
+  configuracion: "#configuracion",
   faq: "#faq",
   registro: "#registro",
 };
@@ -154,6 +204,254 @@ export const LANDING_DEMO_STEPS = [
   },
 ];
 
+export const LANDING_FEATURES = [
+  { id: "reservations", label: "Reservaciones" },
+  { id: "pos", label: "Punto de venta" },
+  { id: "tickets", label: "Comprobantes" },
+  { id: "customers", label: "Clientes" },
+  { id: "desktop", label: "Escritorio" },
+  { id: "kitchen", label: "Cocina" },
+  { id: "inventory", label: "Inventario" },
+  { id: "stock-alerts", label: "Alertas de stock" },
+  { id: "order-alerts", label: "Aviso de pedidos" },
+  { id: "realtime", label: "Tiempo real" },
+  { id: "tablet", label: "Tablet" },
+  { id: "multi-display", label: "Múltiples pantallas" },
+  { id: "qr-menu", label: "Menú QR / Digital", isNew: true },
+];
+
+export const LANDING_INVENTORY = {
+  title: "Inventario",
+  isNew: true,
+  tagline: "Controla tu stock de forma simple, inteligente y sin complicaciones",
+  description:
+    "Gestionar el inventario de tu restaurante es más fácil. El módulo de inventario te ayuda a estar al día con tus insumos, reducir mermas y mejorar la rentabilidad — sin dolores de cabeza.",
+  image: "/images/food/inventory.png",
+  imageAlt: "Panel de inventario con alertas de stock en restaurante",
+  features: [
+    {
+      title: "Seguimiento en tiempo real",
+      description:
+        "Monitorea cantidades, unidades y estados de stock al instante en tu restaurante, café o bar.",
+    },
+    {
+      title: "Deducciones automáticas",
+      description:
+        "El inventario se ajusta con cada venta según la receta del platillo, variante o complemento.",
+    },
+    {
+      title: "Gestión de recetas",
+      description:
+        "Define ingredientes por producto del menú y deja que el sistema calcule el consumo por ti.",
+    },
+    {
+      title: "Alertas inteligentes",
+      description:
+        "Recibe avisos de stock bajo o agotado en tu panel antes de quedarte sin insumos clave.",
+    },
+    {
+      title: "Informes y análisis",
+      description:
+        "Consulta movimientos de entrada y salida, mermas, uso por receta y sugerencias de reorden.",
+    },
+  ],
+};
+
+export const LANDING_DASHBOARD = {
+  title: "Panel de control",
+  description:
+    "Tu centro de mando diario. El panel te mantiene al día con métricas clave como reservaciones, artículos más vendidos y tendencias de clientes. Toma decisiones con datos, optimiza la operación y sorprende a cada comensal — todo desde un solo lugar.",
+  image: "/images/food/dashboard.png",
+  imageAlt: "Panel de control de Kadesh FOOD con ingresos, pedidos y métricas del restaurante",
+  cta: {
+    label: "Probar gratis",
+    href: "/register",
+  },
+  highlights: [
+    "Ingresos, pedidos y ticket promedio con comparación vs. ayer",
+    "Tendencia de ingresos y artículos más vendidos",
+    "Reservaciones del día y alertas de stock bajo",
+    "Horas pico, tipos de pedido y mezcla de pagos",
+    "Comentarios recientes de tus clientes",
+  ],
+};
+
+export const LANDING_POS = {
+  title: "Punto de venta",
+  description:
+    "Toma el control de tu proceso de pedidos con nuestra pantalla de POS intuitiva. Tu equipo registra órdenes más rápido, con menos errores y todo sincronizado con cocina y caja en tiempo real.",
+  image: "/images/food/pos.png",
+  imageAlt: "Pantalla de punto de venta de Kadesh FOOD con menú, mesas y cobro",
+  cta: {
+    label: "Probar gratis",
+    href: "/register",
+  },
+  highlights: [
+    "Menú con categorías, variantes y complementos",
+    "Pedidos de mesa, para llevar y menú QR en un solo lugar",
+    "Borradores, notas por platillo y envío directo a cocina",
+    "Cobro con múltiples formas de pago y recibo al instante",
+    "Vista compacta o detallada para tablet o pantalla táctil",
+  ],
+};
+
+export const LANDING_KITCHEN = {
+  title: "Cocina",
+  description:
+    "La pantalla de cocina (KDS) recibe comandas del POS al instante. Tu equipo ve qué preparar, en qué orden y con las notas de cada platillo — sin gritos ni papeles perdidos.",
+  image: "/images/food/kitchen.png",
+  imageAlt: "Pantalla de cocina de Kadesh FOOD con comandas y estado de pedidos",
+  cta: {
+    label: "Probar gratis",
+    href: "/register",
+  },
+  highlights: [
+    "Comandas en tiempo real con número de token y mesa",
+    "Estados por platillo: pendiente, en preparación y listo",
+    "Notas y complementos visibles en cada ítem",
+    "Aviso sonoro y actualización automática con nuevos pedidos",
+    "Vista en grid para tablet o monitor en cocina",
+  ],
+};
+
+export const LANDING_ORDERS = {
+  title: "Pedidos",
+  description:
+    "Nunca pierdas de vista un pedido. La pantalla de pedidos activos te da una vista en tiempo real de todas las órdenes en curso: da seguimiento, actualiza estados en todas las pantallas y reimprime comprobantes cuando lo necesites.",
+  image: "/images/food/orders.png",
+  imageAlt: "Pantalla de pedidos de Kadesh FOOD con tokens y estado de órdenes activas",
+  cta: {
+    label: "Probar gratis",
+    href: "/register",
+  },
+  highlights: [
+    "Vista en tiempo real con token, mesa y estado de pago",
+    "Actualiza estados: en preparación, listo, entregado y completado",
+    "Sincronización instantánea entre cocina, POS y pantallas",
+    "Reimpresión de comprobantes bajo demanda",
+    "Cobro y cierre de pedidos desde un solo lugar",
+  ],
+};
+
+export const LANDING_RESERVATIONS = {
+  title: "Reservaciones",
+  description:
+    "Simplifica la gestión de reservas con nuestra página dedicada. Registra citas directamente en el sistema, consulta las próximas reservaciones con filtros flexibles y adminístralas sin esfuerzo para una experiencia impecable.",
+  image: "/images/food/reservations.png",
+  imageAlt: "Pantalla de reservaciones de Kadesh FOOD con gestión de mesas y clientes",
+  cta: {
+    label: "Probar gratis",
+    href: "/register",
+  },
+  highlights: [
+    "Registro de reservas con cliente, mesa y número de comensales",
+    "Filtros por hoy, mañana, semana o rango personalizado",
+    "Edición, cancelación y notas por cada reservación",
+    "Asignación de mesa y seguimiento del estado",
+    "Vista centralizada también en el panel de control",
+  ],
+};
+
+export const LANDING_CUSTOMERS = {
+  title: "Clientes",
+  description:
+    "Conoce mejor a tus comensales. Busca clientes, consulta y edita sus datos, identifica clientes recurrentes y construye relaciones más sólidas desde un solo lugar.",
+  image: "/images/food/customers.png",
+  imageAlt: "Pantalla de clientes de Kadesh FOOD con búsqueda y gestión de contactos",
+  cta: {
+    label: "Probar gratis",
+    href: "/register",
+  },
+  highlights: [
+    "Ficha con teléfono, correo, género y fecha de nacimiento",
+    "Búsqueda rápida con paginación de resultados",
+    "Alta, edición y eliminación de clientes",
+    "Importación masiva desde archivo",
+    "Vinculación con reservaciones, POS y facturas",
+  ],
+};
+
+export const LANDING_QR_MENU = {
+  title: "Menú QR / Digital",
+  isNew: true,
+  description:
+    "Olvídate de los menús en papel. Tus clientes escanean el código QR o acceden al menú en línea para una experiencia sin contacto e interactiva. Mejora la higiene, causa buena impresión y mantén tu carta siempre actualizada.",
+  footnote:
+    "Comparte el enlace o descarga el QR e imprímelo en tus mesas y señalización.",
+  image: "/images/food/qr-menu.png",
+  imageAlt: "Menú digital en celular con platillos, precios y variantes",
+  cta: {
+    label: "Probar gratis",
+    href: "/register",
+  },
+  highlights: [
+    "Menú con búsqueda, categorías y fotos de cada platillo",
+    "Variantes y complementos visibles para el comensal",
+    "Pedidos desde el celular que llegan al POS y cocina",
+    "QR por mesa o enlace general para todo el local",
+    "Descarga e impresión del código para tus mesas",
+  ],
+};
+
+export const LANDING_SETUP = {
+  title: "Configuración recomendada",
+  subtitle:
+    "Conecta tus dispositivos en minutos. El punto de venta es el centro: desde ahí fluyen tickets, comandas y estados de pedido.",
+  defaultNode: "pos",
+  connections: [
+    { from: "printer", to: "pos", label: "Tickets y comprobantes" },
+    { from: "pos", to: "kitchen", label: "Comandas a cocina" },
+    { from: "pos", to: "orders", label: "Estado de pedidos" },
+  ],
+  nodes: [
+    {
+      id: "printer",
+      label: "Impresora",
+      description:
+        "Imprime tickets, comandas y comprobantes al instante. Se conecta directo al punto de venta sin configuraciones complicadas.",
+      highlights: [
+        "Tickets de cocina y caja",
+        "Comprobantes para el cliente",
+        "Compatible con impresoras térmicas",
+      ],
+    },
+    {
+      id: "pos",
+      label: "Punto de venta",
+      description:
+        "El corazón de tu operación. Toma pedidos en tablet o pantalla táctil y sincroniza todo con cocina, pedidos e impresora en tiempo real.",
+      highlights: [
+        "Tablet o pantalla táctil",
+        "Mesas, menú y pagos en un solo lugar",
+        "Sincronización instantánea",
+      ],
+      isHub: true,
+    },
+    {
+      id: "kitchen",
+      label: "Cocina",
+      description:
+        "Pantalla de cocina (KDS) que recibe comandas del POS al momento. Los chefs ven qué preparar, en qué orden y con qué prioridad.",
+      highlights: [
+        "Comandas en tiempo real",
+        "Prioridad y tiempos visibles",
+        "Funciona en tablet o monitor",
+      ],
+    },
+    {
+      id: "orders",
+      label: "Pedidos",
+      description:
+        "Pantalla de estado para el salón o mostrador. Tus clientes y equipo ven cuándo está listo cada pedido sin preguntar.",
+      highlights: [
+        "Estado en vivo del pedido",
+        "Ideal para mostrador o autoservicio",
+        "Menos interrupciones al personal",
+      ],
+    },
+  ],
+};
+
 export const LANDING_PERSONAS = [
   {
     id: "owner",
@@ -178,14 +476,58 @@ export const LANDING_PERSONAS = [
     ],
   },
   {
-    id: "team",
-    label: "Equipo de sala",
-    title: "Atiende más rápido, con menos errores",
+    id: "chef",
+    label: "Chef",
+    title: "Cocina bajo control, sin papeles",
     benefits: [
-      "POS intuitivo en tablet o pantalla táctil",
-      "Menú digital con QR para autoservicio",
-      "Pedidos claros para cocina",
-      "Acceso por rol: cada quien ve lo suyo",
+      "Pedidos en tiempo real desde el salón",
+      "Pantalla de cocina (KDS) ordenada por prioridad",
+      "Recetas y costos por platillo",
+      "Alertas cuando falta un ingrediente",
+    ],
+  },
+  {
+    id: "waiter",
+    label: "Mesero",
+    title: "Toma pedidos sin ir y venir",
+    benefits: [
+      "POS en tablet, rápido y claro",
+      "Mesas y comandas en un solo lugar",
+      "Menú digital con modificadores",
+      "Envía a cocina al instante, sin errores",
+    ],
+  },
+  {
+    id: "cashier",
+    label: "Cajero",
+    title: "Cobros rápidos y sin filas",
+    benefits: [
+      "Múltiples formas de pago en un solo flujo",
+      "Facturación y tickets al momento",
+      "Cierre de caja con totales claros",
+      "Propinas y divisiones de cuenta sencillas",
+    ],
+  },
+  {
+    id: "accountant",
+    label: "Contador",
+    title: "Números claros para tu contabilidad",
+    benefits: [
+      "Reportes de ventas e impuestos exportables",
+      "Control de costos e inventario valorizado",
+      "Conciliación de pagos y cierres de turno",
+      "Datos listos para declaraciones y auditorías",
+    ],
+  },
+  {
+    id: "host",
+    label: "Host",
+    title: "La primera impresión, bien organizada",
+    benefits: [
+      "Reservaciones y lista de espera en un solo panel",
+      "Asignación de mesas según capacidad y turno",
+      "Estado del salón visible al instante",
+      "Menú digital con QR para que los clientes ordenen",
     ],
   },
 ];
@@ -204,7 +546,7 @@ export const LANDING_FAQ = [
   {
     question: "¿Puedo probar el sistema antes de pagar?",
     answer:
-      "Sí. Los planes incluyen periodo de prueba gratuita. Crea tu cuenta en /register y empieza a explorar las funciones.",
+      "Sí. Los planes incluyen periodo de prueba gratuita. Crea tu cuenta gratis y empieza a explorar las funciones.",
   },
   {
     question: "¿Funciona para pedidos en mesa, para llevar y domicilio?",
