@@ -14,6 +14,7 @@ const PricingPlans = ({
   setIsTrial,
   btnSubscribe,
   country,
+  marketingMode = false,
 }) => {
   const { t } = useTranslation();
   return (
@@ -38,6 +39,7 @@ const PricingPlans = ({
                 onClick={btnSubscribe}
                 index={index}
                 country={country}
+                marketingMode={marketingMode}
               />
             ))}
         </div>

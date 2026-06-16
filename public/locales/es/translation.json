@@ -19,6 +19,9 @@
     "cafe_restaurant": "Vende más.",
     "hotel_bar": "Administra menos."
   },
+  "landing": {
+    "create_free_account": "Crear cuenta gratis"
+  },
   "register": {
     "title": "Registrarse",
     "business_name_label": "Nombre del negocio",
