@@ -534,7 +534,8 @@
     "tax": "Impuesto",
     "service_charge": "Cargo por servicio",
     "total": "Total",
-    "token_no": "Número de token"
+    "token_no": "Número de token",
+    "offline_notice": "Comprobante offline — pendiente de sincronización con el servidor."
   },
   "payment_success": {
     "title": "¡Éxito!",
@@ -1615,7 +1616,24 @@
     "collect_payment_send_order_to_kitchen": "Cobrar pago y enviar pedido a la cocina",
     "not_found_img_alt": "Extraviado",
     "person": "persona",
-    "100_max_characters": "100 caracteres máx."
+    "100_max_characters": "100 caracteres máx.",
+    "offline": {
+      "banner_title": "Modo sin conexión",
+      "banner_message": "Puedes tomar pedidos y cobrar. Se sincronizarán automáticamente al reconectar.",
+      "pending_title": "Pedidos pendientes de sincronizar",
+      "pending_message": "Tienes {{count}} pedido(s) guardados localmente.",
+      "sync_now": "Sincronizar ahora",
+      "syncing": "Sincronizando pedidos...",
+      "sync_success": "{{count}} pedido(s) sincronizado(s) correctamente.",
+      "sync_failed": "No se pudieron sincronizar {{count}} pedido(s).",
+      "order_saved": "Pedido guardado localmente. Se enviará al reconectar.",
+      "using_cache": "Usando datos guardados del POS.",
+      "no_cache": "Sin conexión y sin datos guardados. Conéctate al menos una vez.",
+      "mode_active": "Sin conexión: modo offline activado.",
+      "qr_unavailable": "Los pedidos QR no están disponibles sin conexión.",
+      "order_badge": "Pedido offline",
+      "order_readonly_action": "Esta acción estará disponible cuando el pedido se sincronice con el servidor."
+    }
   },
   "superadmin_navbar": {
     "dashboard": "Panel de control",
@@ -1878,6 +1896,7 @@
     "no_pricing": "No hay precios configurados",
     "description": "Descripciones"
   },
+  "pos_offline_order_badge": "Pedido offline",
   "refresh_page": {
     "title": "Sesión caducada",
     "description": "No pudimos actualizar tu sesión automáticamente. Por favor, actualiza la página o inicia sesión nuevamente para continuar.",
