@@ -13,6 +13,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import { useOffline } from "../contexts/OfflineContext";
 import { getActiveOfflineKitchenOrders } from "../services/offlineOrdersAdapter";
 import { isNetworkError } from "../helpers/networkError";
+import { formatOrderContextLabel } from "../helpers/orderTypeLabels";
 
 export default function KitchenPage() {
   const { t } = useTranslation();
@@ -286,7 +287,15 @@ export default function KitchenPage() {
                   </div>
                   <div>
                     <div className="flex flex-wrap items-center gap-2 justify-center md:justify-start">
-                      <p className="font-bold">{table_id?`${table_title}`:new String(`${delivery_type} ${customer_type}`).toUpperCase()}</p>
+                      <p className="font-bold">
+                        {formatOrderContextLabel(t, {
+                          tableId: table_id,
+                          tableTitle: table_title,
+                          deliveryType: delivery_type,
+                          customerType: customer_type,
+                          customerName: customer_name,
+                        })}
+                      </p>
                       {offline && (
                         <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-100">
                           {t('pos_offline_order_badge')}

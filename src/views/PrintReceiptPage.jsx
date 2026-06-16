@@ -2,6 +2,10 @@ import React from 'react'
 import { getDetailsForReceiptPrint } from '../helpers/ReceiptHelper'
 import { getImageURL } from "../helpers/ImageHelper";
 import { useTranslation } from "react-i18next";
+import {
+  getCustomerTypeLabel,
+  getDeliveryTypeLabel,
+} from "../helpers/orderTypeLabels";
 
 export default function PrintReceiptPage() {
   const { t } = useTranslation();
@@ -36,20 +40,8 @@ export default function PrintReceiptPage() {
     print_token,
   } = printSettings;
 
-  const getCustomerTypeLabel = (type) => {
-    if (type === "WALKIN") return t("print_receipt.customer_walkin");
-    if (type === "CUSTOMER") return t("print_receipt.customer_registered");
-    return type;
-  };
-
-  const getDeliveryTypeLabel = (type) => {
-    if (!type) return "";
-    const key = String(type).toLowerCase();
-    if (["dinein", "delivery", "takeaway"].includes(key)) {
-      return t(`pos.${key}`);
-    }
-    return type;
-  };
+  const getCustomerTypeLabelForReceipt = (type) => getCustomerTypeLabel(t, type);
+  const getDeliveryTypeLabelForReceipt = (type) => getDeliveryTypeLabel(t, type);
 
   return (
     <div className={`w-[${page_format}mm] font-sans px-2 bg-white text-black`}>
@@ -78,8 +70,8 @@ export default function PrintReceiptPage() {
       {
         show_customer_details == 1 ? <>
           <div className="border-b border-dashed"></div>
-          <p className='text-center'>{getCustomerTypeLabel(customerType)}{customer&&<span>, {customer?.name}</span>}</p>
-          <p className='mt-1'>{t("print_receipt.order_type")}: {getDeliveryTypeLabel(deliveryType)}</p>
+          <p className='text-center'>{getCustomerTypeLabelForReceipt(customerType)}{customer&&<span>, {customer?.name}</span>}</p>
+          <p className='mt-1'>{t("print_receipt.order_type")}: {getDeliveryTypeLabelForReceipt(deliveryType)}</p>
         </>:<></>
       }
 
