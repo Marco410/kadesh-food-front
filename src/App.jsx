@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import PrivateRoute from "./helpers/PrivateRoute";
 import LoginPage from "./views/LoginPage";
+import LandingPage from "./views/LandingPage";
 import DashboardLayout from "./views/DashboardLayout";
 import DashboardPage from "./views/DashboardPage";
 import POSPage from "./views/POSPage";
@@ -78,7 +79,7 @@ export default function App() {
     <NavbarContext.Provider value={[isNavbarCollapsed, setIsNavbarCollapsed]}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

@@ -13,6 +13,7 @@ const PricingCard = ({
   onClick,
   index,
   country,
+  marketingMode = false,
 }) => {
   const getPrice = (frequency) => {
     // 1. Try selected country
@@ -193,9 +194,11 @@ const PricingCard = ({
           onClick(priceId, plan?.is_trial, plan?.trial_days);
         }}
       >
-        {plan?.is_trial
-          ? t("inactive_subscription.start_free_trial")
-          : t("inactive_subscription.subscribe")}
+        {marketingMode
+          ? t("landing.create_free_account")
+          : plan?.is_trial
+            ? t("inactive_subscription.start_free_trial")
+            : t("inactive_subscription.subscribe")}
       </button>
 
       <div className="space-y-4">

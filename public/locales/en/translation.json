@@ -19,6 +19,9 @@
     "cafe_restaurant": "Cafe. Restaurant.",
     "hotel_bar": "Hotel. Bar."
   },
+  "landing": {
+    "create_free_account": "Create free account"
+  },
   "register": {
     "title": "Register",
     "business_name_label": "Business Name",
