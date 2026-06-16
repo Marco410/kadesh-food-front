@@ -37,6 +37,7 @@ export default function HeroSection() {
           </p>
           <p className="mt-4 text-lg text-restro-text max-w-lg">
             POS, cocina en tiempo real, menú QR, inventario, facturas e informes.
+            Modo sin conexión para seguir vendiendo aunque falle internet.
             Todo en la nube, sin instalaciones complicadas.
           </p>
 

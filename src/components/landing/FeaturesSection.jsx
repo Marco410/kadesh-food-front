@@ -14,11 +14,13 @@ import {
   IconDeviceTablet,
   IconDeviceDesktop,
   IconQrcode,
+  IconCloudOff,
 } from "@tabler/icons-react";
 import { LANDING_FEATURES } from "./constants";
 import { useMotionConfig } from "./useReducedMotionSafe";
 
 const FEATURE_ICONS = {
+  offline: IconCloudOff,
   reservations: IconArmchair,
   pos: IconCashRegister,
   tickets: IconPrinter,
