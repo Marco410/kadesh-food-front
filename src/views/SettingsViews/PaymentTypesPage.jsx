@@ -272,13 +272,14 @@ export default function PaymentTypesPage() {
                         {({ selected }) => (
                           <>
                             <span
-                              className={`block truncate ${
+                              className={`flex flex-col items-center gap-1 truncate ${
                                 selected
                                   ? "font-medium text-restro-green"
                                   : "font-normal"
                               }`}
                             >
                               {icon[1]}
+                               <span className="text-xs">{paymentIconLabel(icon[0])}</span>
                             </span>
                             {selected ? (
                               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-restro-green">
@@ -400,13 +401,14 @@ export default function PaymentTypesPage() {
                         {({ selected }) => (
                           <>
                             <span
-                              className={`block truncate ${
+                              className={`flex flex-col items-center gap-1 truncate ${
                                 selected
                                   ? "font-medium text-restro-green"
                                   : "font-normal"
                               }`}
                             >
                               {icon[1]}
+                              <span className="text-xs">{paymentIconLabel(icon[0])}</span>
                             </span>
                             {selected ? (
                               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-restro-green">

@@ -12,6 +12,7 @@ import PainPointsSection from "../components/landing/PainPointsSection";
 import PlatformShowcaseSection from "../components/landing/PlatformShowcaseSection";
 import DashboardSection from "../components/landing/DashboardSection";
 import POSSection from "../components/landing/POSSection";
+import OfflineModeSection from "../components/landing/OfflineModeSection";
 import KitchenSection from "../components/landing/KitchenSection";
 import OrdersSection from "../components/landing/OrdersSection";
 import ReservationsSection from "../components/landing/ReservationsSection";
@@ -65,6 +66,7 @@ export default function LandingPage() {
         <PainPointsSection />
         <DashboardSection />
         <POSSection />
+        <OfflineModeSection />
         <FeaturesSection />
         <KitchenSection />
         <OrdersSection />

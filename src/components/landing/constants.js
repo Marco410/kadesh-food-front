@@ -64,6 +64,7 @@ export const LANDING_ANCHORS = {
   reservaciones: "#reservaciones",
   clientes: "#clientes",
   menuQr: "#menu-qr",
+  offline: "#modo-offline",
   planes: "#planes",
   beneficios: "#beneficios",
   inventario: "#inventario",
@@ -98,10 +99,20 @@ export const LANDING_SHOWCASE_MODULES = [
     title: "Cocina (KDS)",
     headline: "Cocina recibe las órdenes en tiempo real",
     description:
-      "Pantalla de cocina con órdenes organizadas por mesa y tipo de servicio. Reduce errores y acelera la preparación.",
+      "Pantalla de cocina con órdenes organizadas por mesa y tipo de servicio. Reduce errores y acelera la preparación — incluso con pedidos offline mientras no hay internet.",
     image: "/images/food/kitchen.png",
     imageAlt:
       "Sistema de pantalla de cocina con órdenes en tiempo real",
+  },
+  {
+    id: "offline",
+    title: "Modo offline",
+    headline: "¿Se cayó el internet? Sigue vendiendo sin parar",
+    description:
+      "Toma pedidos, cobra en efectivo y consulta comandas en cocina aunque falle la red. Al reconectar, todo se sincroniza automáticamente con el servidor.",
+    image: "/images/food/kitchen.png",
+    imageAlt:
+      "Modo sin conexión de Kadesh FOOD con pedidos offline visibles en cocina",
   },
   {
     id: "customers",
@@ -205,6 +216,7 @@ export const LANDING_DEMO_STEPS = [
 ];
 
 export const LANDING_FEATURES = [
+  { id: "offline", label: "Modo sin conexión", isNew: true },
   { id: "reservations", label: "Reservaciones" },
   { id: "pos", label: "Punto de venta" },
   { id: "tickets", label: "Comprobantes" },
@@ -289,9 +301,60 @@ export const LANDING_POS = {
   highlights: [
     "Menú con categorías, variantes y complementos",
     "Pedidos de mesa, para llevar y menú QR en un solo lugar",
+    "Modo sin conexión: toma pedidos y cobra aunque falle internet",
     "Borradores, notas por platillo y envío directo a cocina",
     "Cobro con múltiples formas de pago y recibo al instante",
     "Vista compacta o detallada para tablet o pantalla táctil",
+  ],
+};
+
+export const LANDING_OFFLINE = {
+  eyebrow: "Modo sin conexión",
+  isNew: true,
+  title: "Tu restaurante no se detiene si falla internet",
+  tagline: "Toma pedidos, cobra y sigue operando — aunque se caiga la red",
+  description:
+    "Kadesh FOOD guarda tu menú y configuración localmente. Si pierdes conexión en pleno servicio, el POS sigue funcionando: registras pedidos, cobras, imprimes tickets y cocina ve las comandas. Cuando vuelve internet, todo se sincroniza solo.",
+  image: "/images/food/kitchen.png",
+  imageAlt:
+    "Modo sin conexión de Kadesh FOOD con banner de alerta y pedidos offline en cocina",
+  cta: {
+    label: "Probar gratis",
+    href: "/register",
+  },
+  steps: [
+    {
+      title: "Carga el menú con internet",
+      description:
+        "Abre el POS al menos una vez con conexión para guardar categorías, productos y formas de pago en el dispositivo.",
+    },
+    {
+      title: "Opera sin conexión",
+      description:
+        "Toma pedidos, envía a cocina y cobra en efectivo u otros métodos offline. Cada orden recibe un token local (O-001, O-002…).",
+    },
+    {
+      title: "Sincroniza al reconectar",
+      description:
+        "Al volver internet, los pedidos pendientes se envían al servidor automáticamente. Un banner te avisa en todo el sistema.",
+    },
+  ],
+  features: [
+    {
+      title: "Banner global de alerta",
+      description:
+        "Todo el equipo ve cuándo el sistema está offline o hay pedidos pendientes de sincronizar.",
+    },
+    {
+      title: "Visible en Pedidos y Cocina",
+      description:
+        "Las comandas offline aparecen con badge «Pedido offline» para que salón y cocina sigan coordinados.",
+    },
+    {
+      title: "Tickets imprimibles",
+      description:
+        "Imprime comprobantes con aviso de sincronización pendiente para entregar al cliente.",
+    },
   ],
 };
 
@@ -307,6 +370,7 @@ export const LANDING_KITCHEN = {
   },
   highlights: [
     "Comandas en tiempo real con número de token y mesa",
+    "Pedidos offline visibles con badge mientras no hay internet",
     "Estados por platillo: pendiente, en preparación y listo",
     "Notas y complementos visibles en cada ítem",
     "Aviso sonoro y actualización automática con nuevos pedidos",
@@ -326,6 +390,7 @@ export const LANDING_ORDERS = {
   },
   highlights: [
     "Vista en tiempo real con token, mesa y estado de pago",
+    "Cola de pedidos offline mientras no hay conexión",
     "Actualiza estados: en preparación, listo, entregado y completado",
     "Sincronización instantánea entre cocina, POS y pantallas",
     "Reimpresión de comprobantes bajo demanda",
@@ -480,6 +545,7 @@ export const LANDING_PERSONAS = [
     label: "Chef",
     title: "Cocina bajo control, sin papeles",
     benefits: [
+      "Pedidos offline visibles aunque no haya internet",
       "Pedidos en tiempo real desde el salón",
       "Pantalla de cocina (KDS) ordenada por prioridad",
       "Recetas y costos por platillo",
@@ -502,6 +568,7 @@ export const LANDING_PERSONAS = [
     label: "Cajero",
     title: "Cobros rápidos y sin filas",
     benefits: [
+      "Modo sin conexión: sigue cobrando aunque falle internet",
       "Múltiples formas de pago en un solo flujo",
       "Facturación y tickets al momento",
       "Cierre de caja con totales claros",
@@ -579,6 +646,11 @@ export const LANDING_FAQ = [
       "Sí. Administra facturas, impuestos y cargos desde el módulo de facturación integrado.",
   },
   {
+    question: "¿Qué pasa si se cae el internet en pleno servicio?",
+    answer:
+      "Kadesh FOOD entra en modo sin conexión. Puedes seguir tomando pedidos, cobrar e imprimir tickets; cocina y pedidos muestran las órdenes locales. Al reconectar, todo se sincroniza automáticamente con el servidor.",
+  },
+  {
     question: "¿En qué ciudades de México está disponible?",
     answer:
       "Kadesh FOOD está disponible en todo México, incluyendo CDMX, Guadalajara, Monterrey y cualquier ciudad con acceso a internet.",
@@ -602,6 +674,11 @@ export const LANDING_PAIN_POINTS = [
   {
     problem: "No sabes cuánto ganas realmente",
     solution: "Informes de ventas, tickets y productos top para decisiones con datos.",
+  },
+  {
+    problem: "Se va el internet y no puedes cobrar",
+    solution:
+      "Modo offline: sigue vendiendo, imprime tickets y sincroniza automáticamente al reconectar.",
   },
   {
     problem: "Clientes que no vuelves a ver",

@@ -1,20 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getUserDetailsInLocalStorage,
   saveUserDetailsInLocalStorage,
 } from "./UserDetails";
 import { saveAuthTokens } from "./AuthTokens";
+import { isAuthError, isNetworkError } from "./networkError";
 import apiClient from "./ApiClient";
+
+const REFRESH_DEBOUNCE_MS = 30_000;
 
 export default function useAuth() {
   const location = useLocation();
   const navigate = useNavigate();
+  const lastRefreshRef = useRef(0);
+  const isRefreshingRef = useRef(false);
 
   const user = getUserDetailsInLocalStorage();
   const role = user?.role || "";
 
-  const safeRefresh = async () => {
+  const safeRefresh = async ({ force = false } = {}) => {
+    if (!navigator.onLine) return;
+
+    const now = Date.now();
+    if (!force && now - lastRefreshRef.current < REFRESH_DEBOUNCE_MS) return;
+    if (isRefreshingRef.current) return;
+
+    isRefreshingRef.current = true;
+    lastRefreshRef.current = now;
+
     try {
       if (role == "superadmin") {
         const res = await apiClient.post("/superadmin/refresh-token");
@@ -24,9 +38,9 @@ export default function useAuth() {
         }
       } else {
         const res = await apiClient.post("/auth/refresh-token");
-        const user = res.data.userDetails;
-        if (user) {
-          saveUserDetailsInLocalStorage(user);
+        const userDetails = res.data.userDetails;
+        if (userDetails) {
+          saveUserDetailsInLocalStorage(userDetails);
         }
         const token = res.data.newAccessToken || res.data.accessToken;
         if (token) {
@@ -36,42 +50,54 @@ export default function useAuth() {
     } catch (error) {
       console.error("Token refresh failed:", error);
 
-      // optional: clear auth state / storage
-      // localStorage.clear();
+      if (isNetworkError(error)) {
+        return;
+      }
 
-      // redirect to signin (or reload)
-      navigate("/refresh", { replace: true });
-      // OR: window.location.reload();
+      if (isAuthError(error) && location.pathname !== "/refresh") {
+        navigate("/refresh", { replace: true });
+      }
+    } finally {
+      isRefreshingRef.current = false;
     }
   };
 
-  // p1 + p2: initial token + refresh every 13 minutes
   useEffect(() => {
-    safeRefresh();
+    safeRefresh({ force: true });
 
     const id = setInterval(() => {
-      safeRefresh();
-    }, 13 * 60 * 1000); // 13 minutes
+      safeRefresh({ force: true });
+    }, 13 * 60 * 1000);
 
     return () => clearInterval(id);
   }, []);
 
-  // p3: get token when window activity changes
   useEffect(() => {
-    const handleActivity = () => {
+    const handleFocus = () => {
       safeRefresh();
     };
 
-    window.addEventListener("focus", handleActivity);
-    document.addEventListener("visibilitychange", handleActivity);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        safeRefresh();
+      }
+    };
+
+    const handleOnline = () => {
+      safeRefresh({ force: true });
+    };
+
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("online", handleOnline);
 
     return () => {
-      window.removeEventListener("focus", handleActivity);
-      document.removeEventListener("visibilitychange", handleActivity);
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("online", handleOnline);
     };
   }, []);
 
-  // p4: get token when path changes, (optional) -- require for upgrade/downgrade
   useEffect(() => {
     safeRefresh();
   }, [location.pathname]);
