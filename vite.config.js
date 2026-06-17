@@ -4,6 +4,16 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          charts: ["apexcharts", "react-apexcharts"],
+          pdf: ["@react-pdf/renderer"],
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     VitePWA({
@@ -11,6 +21,7 @@ export default defineConfig({
       workbox: {
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/api\//],
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
       },
       manifest: {
         name: "Kadesh Food",
