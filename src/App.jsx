@@ -1,73 +1,81 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
 import PrivateRoute from "./helpers/PrivateRoute";
-import LoginPage from "./views/LoginPage";
-import LandingPage from "./views/LandingPage";
-import DashboardLayout from "./views/DashboardLayout";
-import DashboardPage from "./views/DashboardPage";
-import POSPage from "./views/POSPage";
-import OrdersPage from "./views/OrdersPage";
-import KitchenPage from "./views/KitchenPage";
-import ReservationPage from "./views/ReservationPage";
-import CustomersPage from "./views/CustomersPage";
-import InvoicesPage from "./views/InvoicesPage";
-import UsersPage from "./views/UsersPage";
-import ReportsPage from "./views/ReportsPage";
-import SettingsPage from "./views/SettingsPage";
-import SettingDetailsPage from "./views/SettingsViews/SettingDetailsPage";
-import PrintSettingsPage from "./views/SettingsViews/PrintSettingsPage";
-import TablesSettingsPage from "./views/SettingsViews/TableSettingsPage";
-import MenuItemsSettingsPage from "./views/SettingsViews/MenuItemsSettingsPage";
-import TaxSetupPage from "./views/SettingsViews/TaxSetupPage";
-import PaymentTypesPage from "./views/SettingsViews/PaymentTypesPage";
-import DevicesPage from "./views/SettingsViews/DevicesPage";
-import ContactSupport from "./views/SettingsViews/ContactSupportPage";
-import CategoriesPage from "./views/SettingsViews/CategoriesPage";
-import MenuItemViewPage from "./views/SettingsViews/MenuItemViewPage";
 import { NavbarContext } from "./contexts/NavbarContext";
 import { getIsNavbarCollapsed } from "./helpers/NavbarSettings";
-import PrintReceiptPage from "./views/PrintReceiptPage";
-import PrintTokenPage from "./views/PrintTokenPage";
-import NoAccessPage from "./views/NoAccessPage";
-import ProfilePage from "./views/ProfilePage";
 import { SCOPES } from "./config/scopes";
 import ScopeProtectedRoute from "./helpers/ScopeProtectedRoute";
 import { SocketProvider } from "./contexts/SocketContext";
-import RegistrationPage from "./views/RegistrationPage";
-import ForgotPasswordPage from "./views/ForgotPasswordPage";
-import InActiveSubscriptionPage from "./views/InActiveSubscriptionPage";
-import PaymentSuccessPage from "./views/PaymentSuccessPage";
-import PaymentCancelledPage from "./views/PaymentCancelledPage";
-import ResetPasswordPage from "./views/ResetPasswordPage";
-import QRMenuPage from "./views/QRMenuPage";
 import SuperAdminProtectedRoute from "./helpers/SuperAdminProtectedRoute";
-import SuperAdminLoginPage from "./views/SuperAdmin/LoginPage";
-import SuperAdminDashboadLayout from "./views/SuperAdmin/SuperAdminDashboadLayout";
-import SuperAdminDashboardPage from "./views/SuperAdmin/SuperAdminDashboardPage";
-import SuperAdminContactSupportPage from "./views/SuperAdmin/SuperAdminContactSupportPage";
-import SuperAdminTenantsPage from "./views/SuperAdmin/SuperAdminTenantsPage";
-import SuperAdminReportsPage from "./views/SuperAdmin/SuperAdminReportsPage";
-import SuperAdminTenantSubscriptionHistoryPage from "./views/SuperAdmin/SuperAdminTenantSubscriptionHistoryPage";
-import CartPage from "./views/CartPage";
-import OrderSuccessPage from "./views/OrderSuccessPage";
-import OrderFailedPage from "./views/OrderFailedPage";
-import CustomersImportPage from "./views/CustomersImportPage";
-import FeedbackCollectPage from "./views/FeedbackCollectPage";
-import FeedbackCollectSuccessPage from "./views/FeedbackCollectSuccessPage";
-import FeedbackPage from "./views/FeedbackPage";
-import LanguagePage from "./views/LanguagePage";
-import InventoryPage from "./views/InventoryPage";
-import InventoryLogsPage from "./views/InventoryLogsPage";
-import InventoryDashboardPage from "./views/InventoryDashboard";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import MyToaster from "./components/MyToaster";
-import SuperAdminPlansPage from "./views/SuperAdmin/SuperAdminPlansPage";
-import SuperAdminPlanDetails from "./views/SuperAdmin/SuperAdminPlanDetails";
-import SuperAdminPaymentGatewaysPage from "./views/SuperAdmin/SuperAdminPaymentGatewaysPage";
-import RefreshPage from "./views/RefreshPage";
-import NotFoundPage from "./views/NotFoundPage";
 import { Analytics } from "@vercel/analytics/react";
+
+const LandingPage = lazy(() => import("./views/LandingPage"));
+const LoginPage = lazy(() => import("./views/LoginPage"));
+const DashboardLayout = lazy(() => import("./views/DashboardLayout"));
+const DashboardPage = lazy(() => import("./views/DashboardPage"));
+const POSPage = lazy(() => import("./views/POSPage"));
+const OrdersPage = lazy(() => import("./views/OrdersPage"));
+const KitchenPage = lazy(() => import("./views/KitchenPage"));
+const ReservationPage = lazy(() => import("./views/ReservationPage"));
+const CustomersPage = lazy(() => import("./views/CustomersPage"));
+const InvoicesPage = lazy(() => import("./views/InvoicesPage"));
+const UsersPage = lazy(() => import("./views/UsersPage"));
+const ReportsPage = lazy(() => import("./views/ReportsPage"));
+const SettingsPage = lazy(() => import("./views/SettingsPage"));
+const SettingDetailsPage = lazy(() => import("./views/SettingsViews/SettingDetailsPage"));
+const PrintSettingsPage = lazy(() => import("./views/SettingsViews/PrintSettingsPage"));
+const TablesSettingsPage = lazy(() => import("./views/SettingsViews/TableSettingsPage"));
+const MenuItemsSettingsPage = lazy(() => import("./views/SettingsViews/MenuItemsSettingsPage"));
+const TaxSetupPage = lazy(() => import("./views/SettingsViews/TaxSetupPage"));
+const PaymentTypesPage = lazy(() => import("./views/SettingsViews/PaymentTypesPage"));
+const DevicesPage = lazy(() => import("./views/SettingsViews/DevicesPage"));
+const ContactSupport = lazy(() => import("./views/SettingsViews/ContactSupportPage"));
+const CategoriesPage = lazy(() => import("./views/SettingsViews/CategoriesPage"));
+const MenuItemViewPage = lazy(() => import("./views/SettingsViews/MenuItemViewPage"));
+const PrintReceiptPage = lazy(() => import("./views/PrintReceiptPage"));
+const PrintTokenPage = lazy(() => import("./views/PrintTokenPage"));
+const NoAccessPage = lazy(() => import("./views/NoAccessPage"));
+const ProfilePage = lazy(() => import("./views/ProfilePage"));
+const RegistrationPage = lazy(() => import("./views/RegistrationPage"));
+const ForgotPasswordPage = lazy(() => import("./views/ForgotPasswordPage"));
+const InActiveSubscriptionPage = lazy(() => import("./views/InActiveSubscriptionPage"));
+const PaymentSuccessPage = lazy(() => import("./views/PaymentSuccessPage"));
+const PaymentCancelledPage = lazy(() => import("./views/PaymentCancelledPage"));
+const ResetPasswordPage = lazy(() => import("./views/ResetPasswordPage"));
+const QRMenuPage = lazy(() => import("./views/QRMenuPage"));
+const SuperAdminLoginPage = lazy(() => import("./views/SuperAdmin/LoginPage"));
+const SuperAdminDashboadLayout = lazy(() => import("./views/SuperAdmin/SuperAdminDashboadLayout"));
+const SuperAdminDashboardPage = lazy(() => import("./views/SuperAdmin/SuperAdminDashboardPage"));
+const SuperAdminContactSupportPage = lazy(() => import("./views/SuperAdmin/SuperAdminContactSupportPage"));
+const SuperAdminTenantsPage = lazy(() => import("./views/SuperAdmin/SuperAdminTenantsPage"));
+const SuperAdminReportsPage = lazy(() => import("./views/SuperAdmin/SuperAdminReportsPage"));
+const SuperAdminTenantSubscriptionHistoryPage = lazy(() => import("./views/SuperAdmin/SuperAdminTenantSubscriptionHistoryPage"));
+const CartPage = lazy(() => import("./views/CartPage"));
+const OrderSuccessPage = lazy(() => import("./views/OrderSuccessPage"));
+const OrderFailedPage = lazy(() => import("./views/OrderFailedPage"));
+const CustomersImportPage = lazy(() => import("./views/CustomersImportPage"));
+const FeedbackCollectPage = lazy(() => import("./views/FeedbackCollectPage"));
+const FeedbackCollectSuccessPage = lazy(() => import("./views/FeedbackCollectSuccessPage"));
+const FeedbackPage = lazy(() => import("./views/FeedbackPage"));
+const LanguagePage = lazy(() => import("./views/LanguagePage"));
+const InventoryPage = lazy(() => import("./views/InventoryPage"));
+const InventoryLogsPage = lazy(() => import("./views/InventoryLogsPage"));
+const InventoryDashboardPage = lazy(() => import("./views/InventoryDashboard"));
+const SuperAdminPlansPage = lazy(() => import("./views/SuperAdmin/SuperAdminPlansPage"));
+const SuperAdminPlanDetails = lazy(() => import("./views/SuperAdmin/SuperAdminPlanDetails"));
+const SuperAdminPaymentGatewaysPage = lazy(() => import("./views/SuperAdmin/SuperAdminPaymentGatewaysPage"));
+const RefreshPage = lazy(() => import("./views/RefreshPage"));
+const NotFoundPage = lazy(() => import("./views/NotFoundPage"));
+
+function RouteFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <span className="loading loading-spinner loading-lg text-restro-green" />
+    </div>
+  );
+}
 
 export default function App() {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(
@@ -79,6 +87,7 @@ export default function App() {
     <ThemeProvider>
     <NavbarContext.Provider value={[isNavbarCollapsed, setIsNavbarCollapsed]}>
       <BrowserRouter>
+        <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -313,7 +322,7 @@ export default function App() {
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-        {/* <Toaster  /> */}
+        </Suspense>
         <MyToaster />
         <Analytics />
       </BrowserRouter>
