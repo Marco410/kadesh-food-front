@@ -67,6 +67,7 @@ import SuperAdminPlanDetails from "./views/SuperAdmin/SuperAdminPlanDetails";
 import SuperAdminPaymentGatewaysPage from "./views/SuperAdmin/SuperAdminPaymentGatewaysPage";
 import RefreshPage from "./views/RefreshPage";
 import NotFoundPage from "./views/NotFoundPage";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(
@@ -314,6 +315,7 @@ export default function App() {
         </Routes>
         {/* <Toaster  /> */}
         <MyToaster />
+        <Analytics />
       </BrowserRouter>
     </NavbarContext.Provider>
     </ThemeProvider>
